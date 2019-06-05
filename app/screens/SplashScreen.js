@@ -17,7 +17,7 @@ export class SplashScreen extends React.Component {
         progress: 0,
     };
 
-    authService = new AuthService(true);
+    authService = new AuthService(false);
 
     // Fetch the token from storage then navigate to our appropriate place
     _bootstrapAsync = async () => {

@@ -11,6 +11,7 @@ export default class RestClient {
             baseURL: `http://190.210.180.225:3000/api/`,
             timeout: 30000,
         });
+
         if (secured) {
             this.tokenInterceptor();
         }
@@ -19,10 +20,10 @@ export default class RestClient {
     tokenInterceptor = async () => {
         if (this.authToken == null) {
             this.authToken = await this.getToken();
-            console.log(this.authToken);
-        } else {
-            this.instance.defaults.headers.common['Authorization'] = `Bearer ${JSON.parse(token)}`;
+        }
 
+        if(this.authToken != null) {
+            this.instance.defaults.headers.common['Authorization'] = `Bearer ${JSON.parse(this.authToken)}`;
             // this.instance.interceptors.request.use( (config) => {
             //     config.headers.Authorization = `Bearer ${token}`;
             //     console.log(config);
@@ -49,5 +50,9 @@ export default class RestClient {
 
     saveAuthToken(token) {
         this.authToken = token;
+    }
+
+    deleteAuthToken() {
+        this.authToken = null;
     }
 }

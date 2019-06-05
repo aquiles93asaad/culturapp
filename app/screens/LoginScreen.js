@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Image, Keyboard, StyleSheet } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
-import { scaleVertical } from '../utils/scale';
 import { AuthService } from '../services';
 
 export class LoginScreen extends React.Component {
@@ -21,7 +20,6 @@ export class LoginScreen extends React.Component {
 
         this.authService.login(params)
             .then(user => {
-                console.log(user);
                 this.props.navigation.navigate('App');
             })
             .catch(error => {
@@ -50,11 +48,9 @@ export class LoginScreen extends React.Component {
                     style={styles.input}
                     theme={{ dark: true, colors: { primary: '#333366' } }}
                 />
-                <Button
-                    style={styles.save}
-                    text='LOGIN'
-                    onPress={this.onLoginButtonPressed}
-                />
+                <Button mode="contained" onPress={this.onLoginButtonPressed} theme={{ dark: true, colors: { primary: '#333366' } }}>
+                    Login
+                </Button>
             </View>
         </View>
     );
