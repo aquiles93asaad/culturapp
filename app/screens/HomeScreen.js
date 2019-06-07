@@ -1,10 +1,11 @@
 import React from 'react';
-import { Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
 import { WebBrowser } from 'expo';
-
-import { Button } from 'react-native-paper';
+import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
 import { MonoText } from '../components/StyledText';
 import { AuthService } from '../services';
+
+const paddingValue = 8;
 
 export class HomeScreen extends React.Component {
     static navigationOptions = {
@@ -24,10 +25,23 @@ export class HomeScreen extends React.Component {
     };
 
     render() {
-        return (
+        return (     
             <View style={styles.container}>
+
                 <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-                    <View style={styles.welcomeContainer}>
+                    <View
+                        contentContainerStyle={styles.rootContainer}>
+                        <Card style={{marginBottom: 20}} >
+                            <Card.Title style={{height: 150}} title="Generar oportunidad" left={() => <Image style={{width:48, height:48}} source={require('../../assets/images/sale-opportunity-blue.png')} />} />
+                        </Card>
+                        <Card style={{marginBottom: 20}}>
+                            <Card.Title style={{height: 150}} title="Seguimiento de oportunidad" left={() => <Image style={{width:48, height:48}} source={require('../../assets/images/opportunities-list-blue.png')} />} />
+                        </Card>
+                        <Card style={{marginBottom: 20}}>
+                            <Card.Title style={{height: 150}} title="Reportes" left={() => <Image style={{width:48, height:48}} source={require('../../assets/images/reports-blue.png')} />} />
+                        </Card>
+                    </View>
+                    {/* <View style={styles.welcomeContainer}>
                         <Image
                             source={
                                 __DEV__
@@ -36,10 +50,9 @@ export class HomeScreen extends React.Component {
                             }
                             style={styles.welcomeImage}
                         />
-                    </View>
+                    </View> */}
 
-                    <View style={styles.getStartedContainer}>
-                        {this._maybeRenderDevelopmentModeWarning()}
+                    {/* <View style={styles.getStartedContainer}>
 
                         <Text style={styles.getStartedText}>Get started by opening</Text>
 
@@ -54,47 +67,28 @@ export class HomeScreen extends React.Component {
                         <Button mode="contained" onPress={this.onLogoutButtonPressed} theme={{ dark: true, colors: { primary: '#333366' } }}>
                             Logout
                         </Button>
+
+                        <Button mode="contained" onPress={this.onLogoutButtonPressed2}  theme={{ dark: true, colors: { primary: '#333366' } }}>
+                            Logoutaa
+                        </Button>
                     </View>
 
                     <View style={styles.helpContainer}>
                         <TouchableOpacity onPress={this._handleHelpPress} style={styles.helpLink}>
                             <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
                         </TouchableOpacity>
-                    </View>
+                    </View> */}
                 </ScrollView>
 
-                <View style={styles.tabBarInfoContainer}>
+                {/* <View style={styles.tabBarInfoContainer}>
                     <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
 
                     <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
                         <MonoText style={styles.codeHighlightText}>navigation/MainTabNavigator.js</MonoText>
                     </View>
-                </View>
-            </View>
+                </View> */}
+            </View>                
         );
-    }
-
-    _maybeRenderDevelopmentModeWarning() {
-        if (__DEV__) {
-            const learnMoreButton = (
-                <Text onPress={this._handleLearnMorePress} style={styles.helpLinkText}>
-                    Learn more
-        </Text>
-            );
-
-            return (
-                <Text style={styles.developmentModeText}>
-                    Development mode is enabled, your app will be slower but you can use useful development
-          tools. {learnMoreButton}
-                </Text>
-            );
-        } else {
-            return (
-                <Text style={styles.developmentModeText}>
-                    You are not in development mode, your app will run at full speed.
-        </Text>
-            );
-        }
     }
 
     _handleLearnMorePress = () => {
@@ -194,5 +188,13 @@ const styles = StyleSheet.create({
     helpLinkText: {
         fontSize: 14,
         color: '#2e78b7',
+    },
+    root: {
+        // backgroundColor: theme.colors.screen.scroll,
+        // padding: paddingValue,
+    },
+    rootContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
     },
 });

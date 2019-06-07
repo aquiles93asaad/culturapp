@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image, Keyboard, StyleSheet } from 'react-native';
+import { View, Image, Keyboard, StyleSheet, ScrollView } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { AuthService } from '../services';
 
@@ -17,14 +17,20 @@ export class LoginScreen extends React.Component {
 
     onLoginButtonPressed = () => {
         const params = { ...this.state };
-
+        
+        if(params.email == '' || params.password == '') {
+            alert('Complete los campos');
+            return;
+        }
+        
         this.authService.login(params)
-            .then(user => {
-                this.props.navigation.navigate('App');
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        .then(user => {
+            this.props.navigation.navigate('App');
+        })
+        .catch(error => {
+            alert(error);
+            console.log(error);
+        });
     };
 
     render = () => (

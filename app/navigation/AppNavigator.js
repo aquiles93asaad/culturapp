@@ -2,8 +2,28 @@ import { createSwitchNavigator, createStackNavigator, createAppContainer } from 
 import { HomeScreen, LinksScreen, SettingsScreen, SplashScreen, LoginScreen } from '../screens/index';
 // import HomeScreen from '../screens/HomeScreen';
 
-const AppStack = createStackNavigator({ Home: HomeScreen, Links: LinksScreen, Settings: SettingsScreen });
-const AuthStack = createStackNavigator({ Login: { screen: LoginScreen, navigationOptions: { header: null } }});
+const AuthStack = createStackNavigator({ Login: { screen: LoginScreen, navigationOptions: { header: null } } });
+const AppStack = createStackNavigator(
+    {
+        Home: HomeScreen,
+        Links: LinksScreen,
+        Settings: SettingsScreen
+    },
+    {
+        initialRouteName: 'Home',
+        /* The header config from HomeScreen is now here */
+        defaultNavigationOptions: {
+            headerStyle: {
+                backgroundColor: '#f4511e',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                fontWeight: 'bold',
+            },
+        }
+    }
+);
+
 
 export default createAppContainer(
     createSwitchNavigator(

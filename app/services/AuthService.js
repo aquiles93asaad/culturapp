@@ -12,8 +12,12 @@ export class AuthService extends RestClient {
             email: params.email,
             password: params.password
         }).then(result => {
-            this.saveToken(result.data.token);
-            return Promise.resolve(result.data.user);
+            if(typeof result.data.user !== 'undefined') {
+                this.saveToken(result.data.token);
+                return Promise.resolve(result.data.user);
+            } else {
+                return Promise.reject(result.data.message);
+            }
         }).catch(error => {
             return Promise.reject(error);
         });
