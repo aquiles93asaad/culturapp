@@ -9,7 +9,7 @@ const paddingValue = 8;
 
 export class HomeScreen extends React.Component {
     static navigationOptions = {
-        header: null,
+        title: 'Home',
     };
 
     authService = new AuthService(false);
@@ -24,82 +24,48 @@ export class HomeScreen extends React.Component {
         });
     };
 
+    redirectSaleOpportunity = () => {
+        this.props.navigation.navigate('SaleOpportunity');
+    };
+
+    redirectReports = () => {
+        this.props.navigation.navigate('Reports');
+    };
+
+    redirectOpportunity = () => {
+        this.props.navigation.navigate('OpportunityList');
+    };
+
     render() {
         return (     
             <View style={styles.container}>
-
                 <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+                    <Text style={styles.paragraph}>Bienvenido user</Text>
                     <View
                         contentContainerStyle={styles.rootContainer}>
-                        <Card style={{marginBottom: 20}} >
-                            <Card.Title style={{height: 150}} title="Generar oportunidad" left={() => <Image style={{width:48, height:48}} source={require('../../assets/images/sale-opportunity-blue.png')} />} />
-                        </Card>
-                        <Card style={{marginBottom: 20}}>
-                            <Card.Title style={{height: 150}} title="Seguimiento de oportunidad" left={() => <Image style={{width:48, height:48}} source={require('../../assets/images/opportunities-list-blue.png')} />} />
-                        </Card>
-                        <Card style={{marginBottom: 20}}>
-                            <Card.Title style={{height: 150}} title="Reportes" left={() => <Image style={{width:48, height:48}} source={require('../../assets/images/reports-blue.png')} />} />
-                        </Card>
-                    </View>
-                    {/* <View style={styles.welcomeContainer}>
-                        <Image
-                            source={
-                                __DEV__
-                                    ? require('../../assets/images/robot-dev.png')
-                                    : require('../../assets/images/robot-prod.png')
-                            }
-                            style={styles.welcomeImage}
-                        />
-                    </View> */}
-
-                    {/* <View style={styles.getStartedContainer}>
-
-                        <Text style={styles.getStartedText}>Get started by opening</Text>
-
-                        <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-                            <MonoText style={styles.codeHighlightText}>screens/HomeScreen.js</MonoText>
-                        </View>
-
-                        <Text style={styles.getStartedText}>
-                            Change this text and your app will automatically reload.
-                        </Text>
-
+                        <TouchableOpacity onPress={() => this.redirectOpportunity()}>
+                            <Card style={styles.card} >
+                                <Card.Title style={styles.cardTitle} title="Generar oportunidad" left={() => <Image style={{width:48, height:48}} source={require('../../assets/images/sale-opportunity-blue.png')} />} />
+                            </Card>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.redirectSaleOpportunity()}>
+                            <Card style={styles.card}>
+                                <Card.Title style={styles.cardTitle} title="Seguimiento de oportunidad" left={() => <Image style={{width:48, height:48}} source={require('../../assets/images/opportunities-list-blue.png')} />} />
+                            </Card>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.redirectReports()}>
+                            <Card style={styles.card}>
+                                <Card.Title style={styles.cardTitle} title="Reportes" left={() => <Image style={{width:48, height:48}} source={require('../../assets/images/reports-blue.png')} />} />
+                            </Card>
+                        </TouchableOpacity>
                         <Button mode="contained" onPress={this.onLogoutButtonPressed} theme={{ dark: true, colors: { primary: '#333366' } }}>
                             Logout
                         </Button>
-
-                        <Button mode="contained" onPress={this.onLogoutButtonPressed2}  theme={{ dark: true, colors: { primary: '#333366' } }}>
-                            Logoutaa
-                        </Button>
                     </View>
-
-                    <View style={styles.helpContainer}>
-                        <TouchableOpacity onPress={this._handleHelpPress} style={styles.helpLink}>
-                            <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-                        </TouchableOpacity>
-                    </View> */}
                 </ScrollView>
-
-                {/* <View style={styles.tabBarInfoContainer}>
-                    <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-
-                    <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-                        <MonoText style={styles.codeHighlightText}>navigation/MainTabNavigator.js</MonoText>
-                    </View>
-                </View> */}
             </View>                
         );
     }
-
-    _handleLearnMorePress = () => {
-        WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/guides/development-mode');
-    };
-
-    _handleHelpPress = () => {
-        WebBrowser.openBrowserAsync(
-            'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
-        );
-    };
 }
 
 const styles = StyleSheet.create({
@@ -197,4 +163,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
     },
+    card:{
+        marginBottom: 20,
+    },
+    paragraph: {
+        marginBottom: 10,
+		fontSize: 20,
+		textAlign: 'center',
+		color: '#333366',
+		fontWeight: 'bold',
+    },
+    cardTitle:{
+        height: 150,
+    }
 });

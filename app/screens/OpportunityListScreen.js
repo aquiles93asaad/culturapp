@@ -3,15 +3,12 @@ import {
   View,
   StyleSheet,
   Text,
-  Image,
-  Button,
-  Alert,
 } from 'react-native';
-import { ExpoLinksView } from '@expo/samples';
+import { Dropdown } from 'react-native-material-dropdown';
 
-export class LinksScreen extends React.Component {
+export class OpportunityListScreen extends React.Component {
   static navigationOptions = {
-    title: 'Links',
+    title: 'Generar oportunidad',
   };
 
   render() {
@@ -23,11 +20,6 @@ export class LinksScreen extends React.Component {
       value: 'Galicia',
     }];
     return (
-      // <ScrollView style={styles.container}>
-      //   {/* Go ahead and delete ExpoLinksView and replace it with your
-      //      * content, we just wanted to provide you with some helpful links */}
-      //   <ExpoLinksView />
-      // </ScrollView>
       <View style={styles.container}>
       <Text style={styles.paragraph}>
         Datos del potencial cliente
