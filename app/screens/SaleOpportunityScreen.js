@@ -2,49 +2,41 @@ import React from 'react';
 import {
 	View,
 	StyleSheet,
-	Image,
 	Text,
 } from 'react-native';
-import { List } from 'react-native-paper';
+import { Dropdown } from 'react-native-material-dropdown';
+import { Button } from 'react-native-paper';
 
 export class SaleOpportunityScreen extends React.Component {
 	static navigationOptions = {
-		title: 'Seguimiento de oportunidades',
+		title: 'Generar oportunidad',
 	};
 
-	state = {
-		data: 'Banco replay wachin',
-		date: new Date(),
-	}
+	goStep1 = () => {
+        this.props.navigation.navigate('SaleOpportunity2');
+    };
 
 	render() {
+		let data = [{
+			value: 'Santander Rio',
+		}, {
+			value: 'BBVA',
+		}, {
+			value: 'Galicia',
+		}];
 		return (
-			<View
-				style={{ padding: 15 }} >
-				<List.Section
-				// style={styles.data}
-				>
-					<List.Accordion
-						title="First Item"
-						style={styles.data}
-						description={this.state.data + ' ' + this.state.date.getDay() + '/' + this.state.date.getMonth() + '/' + this.state.date.getYear()}
-					>
-						<List.Item title="Creación" description='a' />
-						<List.Item title="Cliente" description='a'/>
-						<List.Item title="Creado por" description='a'/>
-						<List.Item title="Canal de venta" description='a'/>
-					</List.Accordion>
-					<List.Accordion
-						title="First Item"
-						style={styles.data}
-						description={this.state.data + ' ' + this.state.date.getDay() + '/' + this.state.date.getMonth() + '/' + this.state.date.getYear()}
-					>
-						<List.Item title="Creación" description='a' />
-						<List.Item title="Cliente" description='a'/>
-						<List.Item title="Creado por" description='a'/>
-						<List.Item title="Canal de venta" description='a'/>
-					</List.Accordion>
-				</List.Section>
+			<View style={styles.container}>
+				<Text style={styles.paragraph}>
+					Datos del potencial cliente
+      			</Text>
+				<Dropdown
+					label='Nombre de la empresa *'
+					data={data}
+					containerStyle={styles.picker}
+				/>
+				<Button style={styles.mt15} mode="contained" onPress={this.goStep1} theme={{ dark: true, colors: { primary: '#333366' } }}>
+					Siguiente
+				</Button>
 			</View>
 		);
 	}
@@ -56,11 +48,32 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		backgroundColor: 'white',
 	},
-	data:{
-		borderBottomColor: '#dbdcdd',
-		borderBottomWidth: 1,
-		borderTopColor: '#f4f6f7',
-		borderTopWidth: 1,
-		marginBottom: 10,
-	}
+	paragraph: {
+		marginTop: 24,
+		fontSize: 20,
+		textAlign: 'center',
+		color: '#4e3a59',
+	},
+	itemStyle: {
+		fontSize: 15,
+		height: 75,
+		color: 'black',
+		textAlign: 'center',
+		fontWeight: 'bold'
+	},
+	picker: {
+		width: 250
+	},
+	add: {
+		marginTop: 15,
+		fontSize: 60,
+		color: '#4e3a59',
+	},
+	steps: {
+		marginTop: 15,
+		marginBottom: 15,
+	},
+	mt15:{
+        marginTop: 15,
+    }
 });

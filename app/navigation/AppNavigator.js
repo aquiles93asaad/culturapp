@@ -1,5 +1,5 @@
 import { createSwitchNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
-import { HomeScreen, SettingsScreen, SplashScreen, LoginScreen, ReportScreen, OpportunityListScreen, SaleOpportunityScreen } from '../screens/index';
+import { HomeScreen, SettingsScreen, SplashScreen, LoginScreen, ReportScreen, OpportunityListScreen, SaleOpportunityScreen , SaleOpportunityScreen2, SaleOpportunityScreen3 } from '../screens/index';
 // import HomeScreen from '../screens/HomeScreen';
 
 const AuthStack = createStackNavigator({ Login: { screen: LoginScreen, navigationOptions: { header: null } } });
@@ -10,6 +10,8 @@ const AppStack = createStackNavigator(
         Settings: SettingsScreen,
         Reports: ReportScreen,
         OpportunityList: OpportunityListScreen,
+        SaleOpportunity2: SaleOpportunityScreen2,
+        SaleOpportunity3: SaleOpportunityScreen3,
     },
     {
         initialRouteName: 'Home',

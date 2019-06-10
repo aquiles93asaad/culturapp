@@ -43,12 +43,12 @@ export class HomeScreen extends React.Component {
                     <Text style={styles.paragraph}>Bienvenido user</Text>
                     <View
                         contentContainerStyle={styles.rootContainer}>
-                        <TouchableOpacity onPress={() => this.redirectOpportunity()}>
+                        <TouchableOpacity onPress={() => this.redirectSaleOpportunity()}>
                             <Card style={styles.card} >
                                 <Card.Title style={styles.cardTitle} title="Generar oportunidad" left={() => <Image style={{width:48, height:48}} source={require('../../assets/images/sale-opportunity-blue.png')} />} />
                             </Card>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.redirectSaleOpportunity()}>
+                        <TouchableOpacity onPress={() => this.redirectOpportunity()}>
                             <Card style={styles.card}>
                                 <Card.Title style={styles.cardTitle} title="Seguimiento de oportunidad" left={() => <Image style={{width:48, height:48}} source={require('../../assets/images/opportunities-list-blue.png')} />} />
                             </Card>
