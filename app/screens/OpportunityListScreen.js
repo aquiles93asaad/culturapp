@@ -31,20 +31,20 @@ export class OpportunityListScreen extends React.Component {
 						description={this.state.data + ' ' + this.state.date.getDay() + '/' + this.state.date.getMonth() + '/' + this.state.date.getYear()}
 						// left={() => <Image style={{width:24, height:24}} source={require('../../assets/images/opportunity_active.png')}/>}
 					>
-						<List.Item title="Creación" description='a' />
-						<List.Item title="Cliente" description='a'/>
-						<List.Item title="Creado por" description='a'/>
-						<List.Item title="Canal de venta" description='a'/>
+						<List.Item style={{backgroundColor:'#f7f7f7'}} title="Creación" description='a' />
+						<List.Item style={{backgroundColor:'#f7f7f7'}} title="Cliente" description='a'/>
+						<List.Item style={{backgroundColor:'#f7f7f7'}} title="Creado por" description='a'/>
+						<List.Item style={{backgroundColor:'#f7f7f7'}} title="Canal de venta" description='a'/>
 					</List.Accordion>
 					<List.Accordion
 						title="Oportunidad 2"
 						style={styles.itemList}
 						description={this.state.data + ' ' + this.state.date.getDay() + '/' + this.state.date.getMonth() + '/' + this.state.date.getYear()}
 					>
-						<List.Item title="Creación" description='a' />
-						<List.Item title="Cliente" description='a'/>
-						<List.Item title="Creado por" description='a'/>
-						<List.Item title="Canal de venta" description='a'/>
+						<List.Item style={{backgroundColor:'#f7f7f7'}} title="Creación" description='a' />
+						<List.Item style={{backgroundColor:'#f7f7f7'}} title="Cliente" description='a'/>
+						<List.Item style={{backgroundColor:'#f7f7f7'}} title="Creado por" description='a'/>
+						<List.Item style={{backgroundColor:'#f7f7f7'}} title="Canal de venta" description='a'/>
 					</List.Accordion>
 				</List.Section>
 			</ScrollView>
@@ -63,7 +63,6 @@ const styles = StyleSheet.create({
 		borderBottomWidth: 1,
 		borderTopColor: '#f4f6f7',
 		borderTopWidth: 1,
-		marginBottom: 10,
 	},
 	padding:{
 		padding: 15

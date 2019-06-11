@@ -9,20 +9,12 @@ import { Button } from 'react-native-paper';
 
 export class SaleOpportunityScreen3 extends React.Component {
 	static navigationOptions = {
-		title: 'Generar oportunidad',
+		title: 'Something',
     };
-    
-    state = {
-        text: '',
-        digitization: true,
-        docManager: true,
-        hardware: true,
-        automation: true,
-    }
 
 	goStep2 = () => {
-        this.props.navigation.navigate('Home');
-    };
+        this.props.navigation.navigate('OpportunityList');
+	}; 
 
 	render() {
 		return (
@@ -33,7 +25,7 @@ export class SaleOpportunityScreen3 extends React.Component {
       			</Text>
                 <Image style={styles.image} source={require('../../assets/images/saleopportunity_final.png')} />
                 <Button style={styles.mt15} mode="contained" onPress={this.goStep2} theme={{ dark: true, colors: { primary: '#333366' } }}>
-                    Siguiente
+                    Ver oportunidad
                 </Button>
 			</View>
 		);
@@ -87,6 +79,8 @@ const styles = StyleSheet.create({
     },
     mt15:{
         marginTop: 15,
+        borderRadius: 20,
+        borderWidth: 1,
     },
     paragraph: {
         marginTop: 24,

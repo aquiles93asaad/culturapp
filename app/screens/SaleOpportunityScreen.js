@@ -75,5 +75,7 @@ const styles = StyleSheet.create({
 	},
 	mt15:{
         marginTop: 15,
-    }
+        borderRadius: 20,
+        borderWidth: 1,
+    },
 });

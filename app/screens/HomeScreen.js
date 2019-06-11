@@ -1,11 +1,7 @@
 import React from 'react';
 import { Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
-import { WebBrowser } from 'expo';
 import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
-import { MonoText } from '../components/StyledText';
 import { AuthService } from '../services';
-
-const paddingValue = 8;
 
 export class HomeScreen extends React.Component {
     static navigationOptions = {
@@ -58,7 +54,7 @@ export class HomeScreen extends React.Component {
                                 <Card.Title style={styles.cardTitle} title="Reportes" left={() => <Image style={{width:48, height:48}} source={require('../../assets/images/reports-blue.png')} />} />
                             </Card>
                         </TouchableOpacity>
-                        <Button mode="contained" onPress={this.onLogoutButtonPressed} theme={{ dark: true, colors: { primary: '#333366' } }}>
+                        <Button style={styles.mt15} mode="contained" onPress={this.onLogoutButtonPressed} theme={{ dark: true, colors: { primary: '#333366' } }}>
                             Logout
                         </Button>
                     </View>
@@ -175,5 +171,10 @@ const styles = StyleSheet.create({
     },
     cardTitle:{
         height: 150,
-    }
+    },
+    mt15:{
+        marginTop: 15,
+        borderRadius: 20,
+        borderWidth: 1,
+    },
 });

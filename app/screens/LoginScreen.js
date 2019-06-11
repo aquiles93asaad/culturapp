@@ -54,7 +54,7 @@ export class LoginScreen extends React.Component {
                     style={styles.input}
                     theme={{ dark: true, colors: { primary: '#333366' } }}
                 />
-                <Button mode="contained" onPress={this.onLoginButtonPressed} theme={{ dark: true, colors: { primary: '#333366' } }}>
+                <Button style={styles.mt15} mode="contained" onPress={this.onLoginButtonPressed} theme={{ dark: true, colors: { primary: '#333366' } }}>
                     Login
                 </Button>
             </View>
@@ -89,5 +89,10 @@ const styles = StyleSheet.create({
     },
     save: {
         marginVertical: 20,
+    },
+    mt15:{
+        marginTop: 15,
+        borderRadius: 20,
+        borderWidth: 1,
     },
 });

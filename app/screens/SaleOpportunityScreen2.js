@@ -5,7 +5,8 @@ import {
     Text,
     ScrollView,
 } from 'react-native';
-import { TextInput, Checkbox, Button } from 'react-native-paper';
+import { TextInput, Button } from 'react-native-paper';
+import CheckBox from 'react-native-check-box'
 
 export class SaleOpportunityScreen2 extends React.Component {
 	static navigationOptions = {
@@ -45,36 +46,46 @@ export class SaleOpportunityScreen2 extends React.Component {
                         style={{backgroundColor:'white'}}
                         onChangeText={(text) => this.setState({text})}
                         value={this.state.text}/>
-                    <View style={styles.flexDirectionColumn}>
-                        <View style={styles.flexDirectionRow}>
-                            <Checkbox
-                                status={this.state.digitization ? 'checked' : 'unchecked'}
-                                onPress={() => { this.setState({ digitization: !this.state.digitization }); }}
-                            />
-                            <Text style={styles.textCheckbox}> Digitalización</Text>
-                        </View>
-                        <View style={styles.flexDirectionRow}>
-                            <Checkbox
-                                status={this.state.docManager ? 'checked' : 'unchecked'}
-                                onPress={() => { this.setState({ docManager: !this.state.docManager }); }}
-                            />
-                            <Text style={styles.textCheckbox}> Gestor documental</Text>
-                        </View>
-                        <View style={styles.flexDirectionRow}>
-                            <Checkbox
-                                status={this.state.hardware ? 'checked' : 'unchecked'}
-                                onPress={() => { this.setState({ hardware: !this.state.hardware }); }}
-                            />
-                            <Text style={styles.textCheckbox}> Hardware</Text>
-                        </View>
-                        <View style={styles.flexDirectionRow}>
-                            <Checkbox
-                                status={this.state.automation ? 'checked' : 'unchecked'}
-                                onPress={() => { this.setState({ automation: !this.state.automation }); }}
-                            />
-                            <Text style={styles.textCheckbox}> Automatización de procesos</Text>
-                        </View>
-                    </View>
+                    <CheckBox
+                        style={styles.checkBox}
+                        onClick={()=>{
+                        this.setState({
+                            digitization:!this.state.digitization
+                        })
+                        }}
+                        isChecked={this.state.digitization}
+                        rightText={"Digitalización"}
+                    />
+                    <CheckBox
+                        style={styles.checkBox}
+                        onClick={()=>{
+                        this.setState({
+                            docManager:!this.state.docManager
+                        })
+                        }}
+                        isChecked={this.state.docManager}
+                        rightText={"Gestor documental"}
+                    />
+                    <CheckBox
+                        style={styles.checkBox}
+                        onClick={()=>{
+                        this.setState({
+                            hardware:!this.state.hardware
+                        })
+                        }}
+                        isChecked={this.state.hardware}
+                        rightText={"Hardware"}
+                    />
+                    <CheckBox
+                        style={styles.checkBox}
+                        onClick={()=>{
+                        this.setState({
+                            automation:!this.state.automation
+                        })
+                        }}
+                        isChecked={this.state.automation}
+                        rightText={"Automatización de procesos"}
+                    />
                     <Button style={styles.mt15} mode="contained" onPress={this.goStep2} theme={{ dark: true, colors: { primary: '#333366' } }}>
 					    Siguiente
 				    </Button>
@@ -111,11 +122,12 @@ const styles = StyleSheet.create({
     },
     mt15:{
         marginTop: 15,
+        borderRadius: 20,
+        borderWidth: 1,
     },
-    flexDirectionRow:{
-        flexDirection: 'row'
-    },
-    flexDirectionColumn:{
-        flexDirection: 'column'
+    checkBox:{
+        flex: 1,
+        padding: 10,
     }
+
 });
