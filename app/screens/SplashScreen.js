@@ -17,7 +17,7 @@ export class SplashScreen extends React.Component {
         progress: 0,
     };
 
-    authService = new AuthService(false);
+    authService = new AuthService(true);
 
     // Fetch the token from storage then navigate to our appropriate place
     _bootstrapAsync = async () => {
@@ -66,10 +66,6 @@ export class SplashScreen extends React.Component {
                     style={[styles.image, { width: Dimensions.get('window').width }]}
                     source={require('../../assets/images/splashBack.png')}
                 />
-                <View style={styles.text}>
-                    <Text style={styles.hero}>React Native</Text>
-                    <Text style={styles.appName}>UI Kitten</Text>
-                </View>
             </View>
             <ProgressBar
                 color={LightTheme.colors.accent}
