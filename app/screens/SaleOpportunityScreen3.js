@@ -8,9 +8,9 @@ import {
 import { Button } from 'react-native-paper';
 
 export class SaleOpportunityScreen3 extends React.Component {
-	static navigationOptions = {
-		title: 'Something',
-    };
+	// static navigationOptions = {
+	// 	title: 'Something',
+    // };
 
 	goStep2 = () => {
         this.props.navigation.navigate('OpportunityList');

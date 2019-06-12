@@ -9,9 +9,9 @@ import { TextInput, Button } from 'react-native-paper';
 import CheckBox from 'react-native-check-box'
 
 export class SaleOpportunityScreen2 extends React.Component {
-	static navigationOptions = {
-		title: 'Generar oportunidad',
-    };
+	// static navigationOptions = {
+	// 	title: 'Generar oportunidad',
+    // };
     
     state = {
         text: '',

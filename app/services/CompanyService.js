@@ -1,42 +1,26 @@
+// @flow
 import RestClient from './RestClient';
 
 export class CompanyService extends RestClient {
-    constructor(secured) {
-        super(secured);
+    constructor(secured, quienllamo) {
+        super(secured, quienllamo);
     }
 
-    // login(params) {
-    //     return this.instance.post('auth/login', {
-    //         email: params.email,
-    //         password: params.password
-    //     }).then(result => {
-    //         if(typeof result.data.user !== 'undefined') {
-    //             this.saveToken(result.data.token);
-    //             return Promise.resolve(result.data.user);
-    //         } else {
-    //             return Promise.reject(result.data.message);
-    //         }
-    //     }).catch(error => {
-    //         return Promise.reject(error);
-    //     });
-    // }
-
-    // logout() {
-        
-    //     return Promise.resolve();
-    // }
-
-    // me = async() => {
-    //     await this.tokenInterceptor();
-    //     return this.instance.get('auth/me')
-    //     .then(result => {
-    //         if (typeof result.data.user !== 'undefined') {
-    //             return Promise.resolve(result.data.user);
-    //         } else {
-    //             return Promise.reject('No token');
-    //         }
-    //     }).catch(error => {
-    //         return Promise.reject(error);
-    //     });
-    // }
+    getCompanies(filters) {
+        return this.instance.post('company/get', {
+            filters
+        }).then(result => {
+            if(typeof result.data.companies !== 'undefined') {
+                return Promise.resolve(result.data.companies);
+            } else {
+                return Promise.reject(result.data);
+            }   
+        }).catch(error => {
+            return Promise.reject(error);
+        });
+            // .catch(error => {
+            //     return Promise.reject(error);
+            // });
+            // this.authToken;
+    }
 }

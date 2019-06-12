@@ -3,8 +3,8 @@ import RestClient from './RestClient';
 import { SecureStore } from 'expo';
 
 export class AuthService extends RestClient {
-    constructor(secured) {
-        super(secured);
+    constructor(secured, quienllamo) {
+        super(secured, quienllamo);
     }
 
     login(params) {

@@ -13,7 +13,7 @@ export class LoginScreen extends React.Component {
         password: ''
     }
 
-    authService = new AuthService(false);
+    authService = new AuthService(false, 'login');
 
     onLoginButtonPressed = () => {
         const params = { ...this.state };

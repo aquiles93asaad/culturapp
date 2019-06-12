@@ -1,14 +1,14 @@
 import React from 'react';
 import { Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
 import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
-import { AuthService } from '../services';
+// import { AuthService } from '../services';
 
 export class HomeScreen extends React.Component {
-    static navigationOptions = {
-        title: 'Home',
-    };
+    // static navigationOptions = {
+    //     title: 'Home',
+    // };
 
-    authService = new AuthService(false);
+    // authService = new AuthService(false);
 
     onLogoutButtonPressed = () => {
         this.authService.logout()

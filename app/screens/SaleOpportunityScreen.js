@@ -8,9 +8,9 @@ import { Dropdown } from 'react-native-material-dropdown';
 import { Button } from 'react-native-paper';
 
 export class SaleOpportunityScreen extends React.Component {
-	static navigationOptions = {
-		title: 'Generar oportunidad',
-	};
+	// static navigationOptions = {
+	// 	title: 'Generar oportunidad',
+	// };
 
 	goStep1 = () => {
         this.props.navigation.navigate('SaleOpportunity2');
