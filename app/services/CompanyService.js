@@ -2,8 +2,8 @@
 import RestClient from './RestClient';
 
 export class CompanyService extends RestClient {
-    constructor(secured, quienllamo) {
-        super(secured, quienllamo);
+    constructor(secured) {
+        super(secured);
     }
 
     getCompanies(filters) {

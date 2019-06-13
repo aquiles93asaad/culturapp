@@ -21,23 +21,19 @@ export class OpportunityListScreen extends React.Component {
 	state = {
 		data: 'Banco replay wachin',
 		date: new Date(),
-		companies: [],
-	}
-
-	componentDidMount(){
-		
+		allCompanies: [],
 	}
 
 	companyService = new CompanyService(true);
-	
+
 	getCompanies = () => {
 		const filters = {
             isClient: true
         }
 		
 		this.companyService.getCompanies(filters)
-        .then(companies => {
-			console.log(companies);
+		.then(companies => {
+			this.setState({ allCompanies: [...this.state.allCompanies, ...companies ] });
             return companies;
         })
         .catch(error => {
@@ -45,7 +41,14 @@ export class OpportunityListScreen extends React.Component {
         });
 	};
 	
-
+	showList = () => {
+		this.getCompanies();
+		this.state.allCompanies.map((data) => {
+			return ( 
+				console.log(data.name)
+			)
+		})
+	}
 
 	render() {
 		return (
@@ -76,7 +79,8 @@ export class OpportunityListScreen extends React.Component {
 						<List.Item style={{backgroundColor:'#f7f7f7'}} title="Canal de venta" description='a'/>
 					</List.Accordion>
 				</List.Section>
-				<Button style={styles.mt15} mode="contained" onPress={this.onButtonPressed} theme={{ dark: true, colors: { primary: '#333366' } }}>
+
+				<Button style={styles.mt15} mode="contained" onPress={this.showList} theme={{ dark: true, colors: { primary: '#333366' } }}>
 					Logout
 				</Button>
 			</ScrollView>
