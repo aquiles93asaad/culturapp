@@ -7,7 +7,6 @@ import {
 	ScrollView,
 } from 'react-native';
 import { List, Button } from 'react-native-paper';
-import { CompanyService } from '../services';
 
 export class OpportunityListScreen extends React.Component {
 	// static navigationOptions = {
@@ -22,32 +21,6 @@ export class OpportunityListScreen extends React.Component {
 		data: 'Banco replay wachin',
 		date: new Date(),
 		allCompanies: [],
-	}
-
-	companyService = new CompanyService(true);
-
-	getCompanies = () => {
-		const filters = {
-            isClient: true
-        }
-		
-		this.companyService.getCompanies(filters)
-		.then(companies => {
-			this.setState({ allCompanies: [...this.state.allCompanies, ...companies ] });
-            return companies;
-        })
-        .catch(error => {
-            console.log(error);
-        });
-	};
-	
-	showList = () => {
-		this.getCompanies();
-		this.state.allCompanies.map((data) => {
-			return ( 
-				console.log(data.name)
-			)
-		})
 	}
 
 	render() {
@@ -80,9 +53,9 @@ export class OpportunityListScreen extends React.Component {
 					</List.Accordion>
 				</List.Section>
 
-				<Button style={styles.mt15} mode="contained" onPress={this.showList} theme={{ dark: true, colors: { primary: '#333366' } }}>
+				{/* <Button style={styles.mt15} mode="contained" onPress={this.showList} theme={{ dark: true, colors: { primary: '#333366' } }}>
 					Logout
-				</Button>
+				</Button> */}
 			</ScrollView>
 		);
 	}

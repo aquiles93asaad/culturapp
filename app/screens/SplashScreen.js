@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Image, View, Dimensions, StatusBar, Text } from 'react-native';
-import { ProgressBar } from '../components';
-import { scale, scaleVertical } from '../utils/scale';
+// import { ProgressBar } from '../components';
+// import { scale, scaleVertical } from '../utils/scale';
 import { AuthService } from '../services';
 import { LightTheme } from '../themes/theme';
 
@@ -17,7 +17,7 @@ export class SplashScreen extends React.Component {
         progress: 0,
     };
 
-    authService = new AuthService(true);
+    authService = new AuthService(false);
 
     // Fetch the token from storage then navigate to our appropriate place
     _bootstrapAsync = async () => {
@@ -27,6 +27,7 @@ export class SplashScreen extends React.Component {
             // this.setState({ user: user })
             naviageTo = 'App';
         }).catch(error => {
+            console.log(error);
             naviageTo = 'Auth';
         }).finally(() => {
             // This will switch to the App screen or Auth screen and this loading
@@ -63,16 +64,16 @@ export class SplashScreen extends React.Component {
         <View style={styles.container}>
             <View>
                 <Image
-                    style={[styles.image, { width: Dimensions.get('window').width }]}
-                    source={require('../../assets/images/splashBack.png')}
+                    style={[styles.image, { width: Dimensions.get('window').width, height: Dimensions.get('window').height }]}
+                    source={require('../../assets/images/splash.png')}
                 />
             </View>
-            <ProgressBar
+            {/* <ProgressBar
                 color={LightTheme.colors.accent}
                 style={styles.progress}
                 progress={this.state.progress}
                 width={scale(320)}
-            />
+            /> */}
         </View>
     );
 }
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
     },
     image: {
         resizeMode: 'cover',
-        height: scaleVertical(430),
+        // height: scaleVertical(430),
     },
     text: {
         alignItems: 'center',

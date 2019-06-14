@@ -6,11 +6,53 @@ import {
 } from 'react-native';
 import { Dropdown } from 'react-native-material-dropdown';
 import { Button } from 'react-native-paper';
+import { CompanyService } from '../services';
 
 export class SaleOpportunityScreen extends React.Component {
 	// static navigationOptions = {
 	// 	title: 'Generar oportunidad',
-	// };
+    // };
+    
+    state = {
+		companies: [],
+    }
+    
+    companyService = null;
+
+    componentWillMount = async() => {
+        console.log('componentWillMount SaleOpportunityScreen');
+        await this.createServiceInstance();
+        await this.getCompanies();
+    }
+
+    createServiceInstance = async() => {
+        this.companyService = new CompanyService(true);
+    }
+
+	getCompanies = async() => {
+        console.log('getCompanies SaleOpportunityScreen');
+		const filters = {
+            isClient: true
+        }
+		
+		await this.companyService.getCompanies(filters)
+		.then(companies => {
+            console.log(companies);
+			this.setState({ companies: [...companies ] });
+            return companies;
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    };
+    
+    showList = () => {
+		this.state.allCompanies.map((data) => {
+			return ( 
+				console.log(data.name)
+			)
+		})
+	}
 
 	goStep1 = () => {
         this.props.navigation.navigate('SaleOpportunity2');

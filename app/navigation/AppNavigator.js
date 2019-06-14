@@ -21,12 +21,12 @@ const AppStack = createStackNavigator(
         defaultNavigationOptions: ({ navigation }) => ({
             headerTitle: (
                 <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-                    <Image style={{width: 250, height: 40, marginBottom: 10, resizeMode:'contain'}} source={require('../../assets/images/logohome.png')}/>
+                    <Image style={{width: 250, height: 40, marginBottom: 10, resizeMode:'contain'}} source={require('../../assets/images/logo_home.png')}/>
                 </TouchableOpacity>
             ),
             headerLeft:(
                 <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-                    <Image style={{alignSelf: 'center', width:30, height:30 , resizeMode:'contain', marginLeft: 10}} source={require('../../assets/images/perfil.png')}/>
+                    <Image style={{alignSelf: 'center', width:30, height:30 , resizeMode:'contain', marginLeft: 10}} source={require('../../assets/images/profile_icon.png')}/>
                 </TouchableOpacity>
             ),
             headerRight:(
@@ -34,7 +34,7 @@ const AppStack = createStackNavigator(
                 height: 30,
                 width: 30,
                 resizeMode:'contain',
-                marginRight: 10}} source={require('../../assets/images/salir.png')}/>
+                marginRight: 10}} source={require('../../assets/images/logout_icon.png')}/>
             ),
             headerStyle: {
                 backgroundColor: '#333366',

@@ -7,6 +7,7 @@ export class CompanyService extends RestClient {
     }
 
     getCompanies(filters) {
+        console.log('getCompanies CompanyService');
         return this.instance.post('company/get', {
             filters
         }).then(result => {
@@ -18,9 +19,5 @@ export class CompanyService extends RestClient {
         }).catch(error => {
             return Promise.reject(error);
         });
-            // .catch(error => {
-            //     return Promise.reject(error);
-            // });
-            // this.authToken;
     }
 }

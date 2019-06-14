@@ -13,7 +13,7 @@ export class LoginScreen extends React.Component {
         password: ''
     }
 
-    authService = new AuthService(false, 'login');
+    authService = new AuthService(false);
 
     onLoginButtonPressed = () => {
         const params = { ...this.state };
@@ -36,7 +36,7 @@ export class LoginScreen extends React.Component {
     render = () => (
         <View style={styles.screen} onStartShouldSetResponder={() => true} onResponderRelease={() => Keyboard.dismiss()} nativeID="loginContainer">
             <View style={styles.header} nativeID="loginHeader">
-                <Image resizeMode="contain" style={styles.image} source={require('../../assets/images/logo.png')} />
+                <Image resizeMode="contain" style={styles.image} source={require('../../assets/images/logo_login.png')} />
             </View>
             <View style={styles.content}>
                 <TextInput
