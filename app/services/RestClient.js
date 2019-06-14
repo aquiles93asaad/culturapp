@@ -19,7 +19,6 @@ export default class RestClient {
     }
 
     tokenInterceptor = async () => {
-        console.log('tokenInterceptor');
         const token = await this.tokenServiceInstance.getToken();
         if (token != null) {
             this.instance.defaults.headers.common['Authorization'] = `Bearer ${JSON.parse(token)}`;

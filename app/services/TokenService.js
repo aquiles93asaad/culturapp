@@ -20,9 +20,7 @@ export default class TokenService {
     getToken = async() => {
         try {
             if(this.authToken) {
-                console.log('TokenService: Ya tiene el token');
             } else {
-                console.log('TokenService: Lo esta buscando en el SecureStore');
                 const token = await SecureStore.getItemAsync('AuthToken');
                 this.authToken = token;
             }

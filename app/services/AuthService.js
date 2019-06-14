@@ -42,7 +42,6 @@ export class AuthService extends RestClient {
                     return Promise.reject(error);
                 });
         }
-        console.log('No hay Token');
         return Promise.reject('No hay Token');
     }
 }

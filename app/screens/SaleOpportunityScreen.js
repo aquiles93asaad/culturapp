@@ -15,12 +15,12 @@ export class SaleOpportunityScreen extends React.Component {
     
     state = {
 		companies: [],
+		dataSelect: [],
     }
     
     companyService = null;
 
     componentWillMount = async() => {
-        console.log('componentWillMount SaleOpportunityScreen');
         await this.createServiceInstance();
         await this.getCompanies();
     }
@@ -30,14 +30,12 @@ export class SaleOpportunityScreen extends React.Component {
     }
 
 	getCompanies = async() => {
-        console.log('getCompanies SaleOpportunityScreen');
 		const filters = {
             isClient: true
         }
 		
 		await this.companyService.getCompanies(filters)
 		.then(companies => {
-            console.log(companies);
 			this.setState({ companies: [...companies ] });
             return companies;
         })
@@ -47,11 +45,22 @@ export class SaleOpportunityScreen extends React.Component {
     };
     
     showList = () => {
-		this.state.allCompanies.map((data) => {
-			return ( 
-				console.log(data.name)
-			)
-		})
+		let data = [];
+		for (let i = 0; i < this.state.companies.length; i++) {
+			// this.setState({ dataSelect: [...this.state.dataSelect , {"value" : this.state.companies[i].name, "id" :  this.state.companies[i]._id }]})
+			data.push( {"value" : this.state.companies[i].name, "id" :  this.state.companies[i]._id })
+		}
+		// this.state.companies.map((data) => {
+		// 	this.setState({ dataSelect: [...this.state.dataSelect , {"value" : data.name, "id" :  data._id }]})
+		// })
+		return ( 
+			<Dropdown
+					label='Nombre de la empresa *'
+					data={data}
+					containerStyle={styles.picker}
+				/>
+				
+		)
 	}
 
 	goStep1 = () => {
@@ -59,23 +68,12 @@ export class SaleOpportunityScreen extends React.Component {
     };
 
 	render() {
-		let data = [{
-			value: 'Santander Rio',
-		}, {
-			value: 'BBVA',
-		}, {
-			value: 'Galicia',
-		}];
 		return (
 			<View style={styles.container}>
 				<Text style={styles.paragraph}>
 					Datos del potencial cliente
       			</Text>
-				<Dropdown
-					label='Nombre de la empresa *'
-					data={data}
-					containerStyle={styles.picker}
-				/>
+				{this.showList()}
 				<Button style={styles.mt15} mode="contained" onPress={this.goStep1} theme={{ dark: true, colors: { primary: '#333366' } }}>
 					Siguiente
 				</Button>
