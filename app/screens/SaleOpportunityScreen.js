@@ -14,8 +14,9 @@ export class SaleOpportunityScreen extends React.Component {
     // };
     
     state = {
-		companies: [],
-		dataSelect: [],
+		clients: [],
+		// dataSelect: '',
+		selectedClientId: '',
     }
     
     companyService = null;
@@ -36,7 +37,7 @@ export class SaleOpportunityScreen extends React.Component {
 		
 		await this.companyService.getCompanies(filters)
 		.then(companies => {
-			this.setState({ companies: [...companies ] });
+			this.setState({ clients: [...companies ] });
             return companies;
         })
         .catch(error => {
@@ -46,9 +47,9 @@ export class SaleOpportunityScreen extends React.Component {
     
     showList = () => {
 		let data = [];
-		for (let i = 0; i < this.state.companies.length; i++) {
+		for (let i = 0; i < this.state.clients.length; i++) {
 			// this.setState({ dataSelect: [...this.state.dataSelect , {"value" : this.state.companies[i].name, "id" :  this.state.companies[i]._id }]})
-			data.push( {"value" : this.state.companies[i].name, "id" :  this.state.companies[i]._id })
+			data.push( {"value" : this.state.clients[i].name, "id" :  this.state.clients[i]._id })
 		}
 		// this.state.companies.map((data) => {
 		// 	this.setState({ dataSelect: [...this.state.dataSelect , {"value" : data.name, "id" :  data._id }]})
@@ -58,13 +59,18 @@ export class SaleOpportunityScreen extends React.Component {
 					label='Nombre de la empresa *'
 					data={data}
 					containerStyle={styles.picker}
+					onChangeText={this.onChangeCompany}
 				/>
 				
 		)
 	}
 
+	onChangeCompany = (args, index, data) => {
+		this.setState({selectedClientId: this.state.clients[index]._id});
+	}
 	goStep1 = () => {
-        this.props.navigation.navigate('SaleOpportunity2');
+		console.log(this.state.firstData);
+		this.props.navigation.navigate('SaleOpportunity2', {data: this.state.selectedClientId});
     };
 
 	render() {

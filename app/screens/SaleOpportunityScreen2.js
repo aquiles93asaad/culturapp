@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import CheckBox from 'react-native-check-box'
+import { OpportunityService } from '../services';
 
 export class SaleOpportunityScreen2 extends React.Component {
 	// static navigationOptions = {
@@ -14,19 +15,52 @@ export class SaleOpportunityScreen2 extends React.Component {
     // };
     
     state = {
-        text: '',
+        nameOpportunity: '',
+        descOpportunity: '',
         digitization: false,
         docManager: false,
         hardware: false,
         automation: false,
+        firstStepData: '',
+    }
+
+    componentWillMount = async() => {
+        await this.createServiceInstance();
+        const { navigation } = this.props;
+        const idCompany = navigation.getParam('data', 'NO-ID');
+        this.setState({firstStepData: idCompany})
+        return this.state.firstStepData;
+    }
+
+    createServiceInstance = async() => {
+        this.opportunityService = new OpportunityService(true);
     }
 
 	goStep2 = () => {
+        let opportunity = [];
+        opportunity.push({
+            "name": this.state.nameOpportunity,
+            "description": this.state.descOpportunity,
+            "companyClient": this.state.firstStepData,
+            "automation": this.state.automation,
+            "docManager": this.state.docManager,
+            "digitization": this.state.digitization,
+            "hardware": this.state.hardware,
+        });
+        this.opportunityService.create(opportunity[0])
+        .then(result => {
+            return result;
+        })
+        .catch(error => {
+            console.log(error);
+        });
         this.props.navigation.navigate('SaleOpportunity3');
     };
 
 	render() {
+        
 		return (
+            
 			<ScrollView>
                 <Text style={styles.paragraph}>
 					Datos de la oportunidad
@@ -35,17 +69,17 @@ export class SaleOpportunityScreen2 extends React.Component {
                 style={styles.padding}>
                     <TextInput
                         label='Nombre de la oportunidad'
-                        value={this.state.text}
+                        value={this.state.nameOpportunity}
                         style={{backgroundColor:'white'}}
-                        onChangeText={text => this.setState({ text })}
+                        onChangeText={nameOpportunity => this.setState({ nameOpportunity })}
                     />
                     <TextInput
                         label='Descripción'
                         multiline={true}
                         numberOfLines={4}
                         style={{backgroundColor:'white'}}
-                        onChangeText={(text) => this.setState({text})}
-                        value={this.state.text}/>
+                        onChangeText={(descOpportunity) => this.setState({descOpportunity})}
+                        value={this.state.descOpportunity}/>
                     <CheckBox
                         style={styles.checkBox}
                         onClick={()=>{
