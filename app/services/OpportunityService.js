@@ -19,7 +19,18 @@ export class OpportunityService extends RestClient {
             return Promise.reject(error);
         });
     }
+
+    get(filters, onlyUserOpportunities) {
+        const params = {
+            filters: filters,
+            onlyUserOpportunities: onlyUserOpportunities,
+        };
+        return this.instance.post('/opportunity/get', {
+            params
+        }).then(result => {
+            return Promise.resolve(result.data.opportunities);
+        }).catch(error => {
+            return Promise.reject(error);
+        });
+    }
 }
-
-
-

@@ -5,7 +5,7 @@ import {
     Text,
     ScrollView,
 } from 'react-native';
-import { TextInput, Button } from 'react-native-paper';
+import { TextInput, Button, Snackbar } from 'react-native-paper';
 import CheckBox from 'react-native-check-box'
 import { OpportunityService } from '../services';
 
@@ -22,6 +22,7 @@ export class SaleOpportunityScreen2 extends React.Component {
         hardware: false,
         automation: false,
         firstStepData: '',
+        visible : false,
     }
 
     componentWillMount = async() => {
@@ -37,30 +38,37 @@ export class SaleOpportunityScreen2 extends React.Component {
     }
 
 	goStep2 = () => {
-        let opportunity = [];
-        opportunity.push({
-            "name": this.state.nameOpportunity,
-            "description": this.state.descOpportunity,
-            "companyClient": this.state.firstStepData,
-            "automation": this.state.automation,
-            "docManager": this.state.docManager,
-            "digitization": this.state.digitization,
-            "hardware": this.state.hardware,
-        });
-        this.opportunityService.create(opportunity[0])
-        .then(result => {
-            return result;
-        })
-        .catch(error => {
-            console.log(error);
-        });
-        this.props.navigation.navigate('SaleOpportunity3');
+        console.log(this.state.docManager);
+        console.log(this.state.digitization);
+        console.log(this.state.nameOpportunity);
+        console.log(this.state.descOpportunity);
+        if(this.state.nameOpportunity != '' && this.state.descOpportunity != '' && (this.state.docManager == true || this.state.digitization == true)){
+            let opportunity = [];
+            opportunity.push({
+                "name": this.state.nameOpportunity,
+                "description": this.state.descOpportunity,
+                "companyClient": this.state.firstStepData,
+                "automation": this.state.automation,
+                "docManager": this.state.docManager,
+                "digitization": this.state.digitization,
+                "hardware": this.state.hardware,
+            });
+            this.opportunityService.create(opportunity[0])
+            .then(result => {
+                return result;
+            })
+            .catch(error => {
+                console.log(error);
+            });
+            this.props.navigation.navigate('SaleOpportunity3');
+        } else {
+            this.setState(state => ({ visible: !state.visible }))
+        }
     };
 
 	render() {
-        
+        const { visible } = this.state;
 		return (
-            
 			<ScrollView>
                 <Text style={styles.paragraph}>
 					Datos de la oportunidad
@@ -71,7 +79,7 @@ export class SaleOpportunityScreen2 extends React.Component {
                         label='Nombre de la oportunidad'
                         value={this.state.nameOpportunity}
                         style={{backgroundColor:'white'}}
-                        onChangeText={nameOpportunity => this.setState({ nameOpportunity })}
+                        onChangeText={(nameOpportunity) => this.setState({nameOpportunity})}
                     />
                     <TextInput
                         label='Descripción'
@@ -123,6 +131,18 @@ export class SaleOpportunityScreen2 extends React.Component {
                     <Button style={styles.mt15} mode="contained" onPress={this.goStep2} theme={{ dark: true, colors: { primary: '#333366' } }}>
 					    Siguiente
 				    </Button>
+                    <Snackbar
+                        visible={this.state.visible}
+                        onDismiss={() => this.setState({ visible: false })}
+                        action={{
+                        label: 'OK',
+                        onPress: () => {
+                            // Do something
+                        },
+                        }}
+                    >
+                        Alguno de los datos ingresados es erroneo o se encuentra incompleto.
+                    </Snackbar>
                 </View>
 			</ScrollView>
 		);
