@@ -46,21 +46,41 @@ export class OpportunityListScreen extends React.Component {
         });
 	}
 	
-	showList = () => {
+	showList() {
 			return (
 				this.state.allOpportunities.map((data) => {
-					console.log(data);
-					<List.Accordion
-						title={data.name}
-						style={data.itemList}
-						description={data.companyClient.name + ' ' + data.createdAt}
-						left={() => <Image style={{width:24, height:24}} source={require('../../assets/images/opportunity_active.png')}/>}
-						>
-						<List.Item style={{backgroundColor:'#f7f7f7'}} title="Creación" description={data.companyClient.createdAt} />
-						<List.Item style={{backgroundColor:'#f7f7f7'}} title="Cliente" description={data.companyClient.name}/>
-						<List.Item style={{backgroundColor:'#f7f7f7'}} title="Creado por" description={data.createdBy.name + ' ' + data.createdBy.lastName}/>
-						<List.Item style={{backgroundColor:'#f7f7f7'}} title="Canal de venta" description={data.description}/>
-					</List.Accordion>
+					// var stateImg = require('../../assets/images/opportunity_'+data.state+'.png');
+					if (data.state == 'active'){
+						return (
+						<List.Accordion
+							key={data._id}
+							title={data.name}
+							style={data.itemList}
+							description={data.companyClient.name + ' ' + data.createdAt}
+							left={() => <Image style={{width:24, height:24}} source={require('../../assets/images/opportunity_active.png')}/>}
+							>
+							<List.Item style={{backgroundColor:'#f7f7f7'}} title="Creación" description={data.companyClient.createdAt} />
+							<List.Item style={{backgroundColor:'#f7f7f7'}} title="Cliente" description={data.companyClient.name}/>
+							<List.Item style={{backgroundColor:'#f7f7f7'}} title="Creado por" description={data.createdBy.name + ' ' + data.createdBy.lastName}/>
+							<List.Item style={{backgroundColor:'#f7f7f7'}} title="Canal de venta" description={data.createdBy.userCompany.name}/>
+						</List.Accordion>
+						)
+					} else {
+						return (
+							<List.Accordion
+								key={data._id}
+								title={data.name}
+								style={data.itemList}
+								description={data.companyClient.name + ' ' + data.createdAt}
+								left={() => <Image style={{width:24, height:24}} source={require('../../assets/images/opportunity_active.png')}/>}
+								>
+								<List.Item style={{backgroundColor:'#f7f7f7'}} title="Creación" description={data.companyClient.createdAt} />
+								<List.Item style={{backgroundColor:'#f7f7f7'}} title="Cliente" description={data.companyClient.name}/>
+								<List.Item style={{backgroundColor:'#f7f7f7'}} title="Creado por" description={data.createdBy.name + ' ' + data.createdBy.lastName}/>
+								<List.Item style={{backgroundColor:'#f7f7f7'}} title="Canal de venta" description={data.createdBy.userCompany.name}/>
+							</List.Accordion>
+							)
+					}
 				})
 				
 			)
@@ -97,7 +117,6 @@ export class OpportunityListScreen extends React.Component {
 					</List.Accordion> */}
 					{this.showList()}
 				</List.Section>
-
 				{/* <Button style={styles.mt15} mode="contained" onPress={this.showList} theme={{ dark: true, colors: { primary: '#333366' } }}>
 					Logout
 				</Button> */}
