@@ -1,9 +1,7 @@
 import React from 'react';
 import {
-	View,
 	StyleSheet,
 	Image,
-	Text,
 	ScrollView,
 } from 'react-native';
 import { List, Button } from 'react-native-paper';
@@ -44,82 +42,48 @@ export class OpportunityListScreen extends React.Component {
         .catch(error => {
             console.log(error);
         });
-	}
+    }
+    
+    renderStateIcon = (state) => {
+        switch (state) {
+            case 'won':
+                return require('../../assets/images/opportunity_won.png')
+            case 'lost':
+                return require('../../assets/images/opportunity_lost.png')
+            case 'dismissed':
+                return require('../../assets/images/opportunity_dismissed.png')
+            default:
+                return require('../../assets/images/opportunity_active.png')
+        }
+    }
 	
 	showList() {
-			return (
-				this.state.allOpportunities.map((data) => {
-					// var stateImg = require('../../assets/images/opportunity_'+data.state+'.png');
-					if (data.state == 'active'){
-						return (
-						<List.Accordion
-							key={data._id}
-							title={data.name}
-							style={data.itemList}
-							description={data.companyClient.name + ' ' + data.createdAt}
-							left={() => <Image style={{width:24, height:24}} source={require('../../assets/images/opportunity_active.png')}/>}
-							>
-							<List.Item style={{backgroundColor:'#f7f7f7'}} title="Creación" description={data.companyClient.createdAt} />
-							<List.Item style={{backgroundColor:'#f7f7f7'}} title="Cliente" description={data.companyClient.name}/>
-							<List.Item style={{backgroundColor:'#f7f7f7'}} title="Creado por" description={data.createdBy.name + ' ' + data.createdBy.lastName}/>
-							<List.Item style={{backgroundColor:'#f7f7f7'}} title="Canal de venta" description={data.createdBy.userCompany.name}/>
-						</List.Accordion>
-						)
-					} else {
-						return (
-							<List.Accordion
-								key={data._id}
-								title={data.name}
-								style={data.itemList}
-								description={data.companyClient.name + ' ' + data.createdAt}
-								left={() => <Image style={{width:24, height:24}} source={require('../../assets/images/opportunity_active.png')}/>}
-								>
-								<List.Item style={{backgroundColor:'#f7f7f7'}} title="Creación" description={data.companyClient.createdAt} />
-								<List.Item style={{backgroundColor:'#f7f7f7'}} title="Cliente" description={data.companyClient.name}/>
-								<List.Item style={{backgroundColor:'#f7f7f7'}} title="Creado por" description={data.createdBy.name + ' ' + data.createdBy.lastName}/>
-								<List.Item style={{backgroundColor:'#f7f7f7'}} title="Canal de venta" description={data.createdBy.userCompany.name}/>
-							</List.Accordion>
-							)
-					}
-				})
-				
-			)
-		}
-
+        return (
+            this.state.allOpportunities.map((data) => {
+                return (
+                    <List.Accordion
+                        key={data._id}
+                        title={data.name}
+                        style={data.itemList}
+                        description={data.companyClient.name + ' ' + data.createdAt}
+                        left={() => <Image style={{width:24, height:24}} source={this.renderStateIcon(data.state)}/>}>
+                        <List.Item style={{backgroundColor:'#f7f7f7'}} title="Creación" description={data.companyClient.createdAt} />
+                        <List.Item style={{backgroundColor:'#f7f7f7'}} title="Cliente" description={data.companyClient.name}/>
+                        <List.Item style={{backgroundColor:'#f7f7f7'}} title="Creado por" description={data.createdBy.name + ' ' + data.createdBy.lastName}/>
+                        <List.Item style={{backgroundColor:'#f7f7f7'}} title="Canal de venta" description={data.createdBy.userCompany.name}/>
+                    </List.Accordion>
+                )
+            })
+        )
+    }
 	
 	render() {
 		return (
 			<ScrollView
 				style={styles.padding} >
-				<List.Section
-				// style={styles.data}
-				>
-					{/* <List.Accordion
-						title="Oportunidad 1"
-						style={styles.itemList}
-						description={this.state.data + ' ' + this.state.date.getDay() + '/' + this.state.date.getMonth() + '/' + this.state.date.getYear()}
-						left={() => <Image style={{width:24, height:24}} source={require('../../assets/images/opportunity_active.png')}/>}
-					>
-						<List.Item style={{backgroundColor:'#f7f7f7'}} title="Creación" description='a' />
-						<List.Item style={{backgroundColor:'#f7f7f7'}} title="Cliente" description='a'/>
-						<List.Item style={{backgroundColor:'#f7f7f7'}} title="Creado por" description='a'/>
-						<List.Item style={{backgroundColor:'#f7f7f7'}} title="Canal de venta" description='a'/>
-					</List.Accordion>
-					<List.Accordion
-						title="Oportunidad 2"
-						style={styles.itemList}
-						description={this.state.data + ' ' + this.state.date.getDay() + '/' + this.state.date.getMonth() + '/' + this.state.date.getYear()}
-					>
-						<List.Item style={{backgroundColor:'#f7f7f7'}} title="Creación" description='a' />
-						<List.Item style={{backgroundColor:'#f7f7f7'}} title="Cliente" description='a'/>
-						<List.Item style={{backgroundColor:'#f7f7f7'}} title="Creado por" description='a'/>
-						<List.Item style={{backgroundColor:'#f7f7f7'}} title="Canal de venta" description='a'/>
-					</List.Accordion> */}
+				<List.Section>
 					{this.showList()}
 				</List.Section>
-				{/* <Button style={styles.mt15} mode="contained" onPress={this.showList} theme={{ dark: true, colors: { primary: '#333366' } }}>
-					Logout
-				</Button> */}
 			</ScrollView>
 		);
 	}
