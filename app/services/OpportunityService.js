@@ -20,6 +20,21 @@ export class OpportunityService extends RestClient {
         });
     }
 
+    update(opportunity) {
+        return this.instance.post('/opportunity/update', {
+            opportunity
+        }).then(result => {
+            if(typeof result.data.opportunity !== 'undefined') {
+                console.log(result.data.opportunity);
+                return Promise.reject(result.data.opportunity);
+            } else {
+                return Promise.reject(result.data);
+            }
+        }).catch(error => {
+            return Promise.reject(error);
+        });
+    }
+
     get(filters, onlyUserOpportunities) {
         const params = {
             filters: filters,
