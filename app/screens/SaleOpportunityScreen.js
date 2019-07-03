@@ -56,11 +56,11 @@ export class SaleOpportunityScreen extends React.Component {
 		// })
 		return ( 
 			<Dropdown
-					label='Nombre de la empresa *'
-					data={data}
-					containerStyle={styles.picker}
-					onChangeText={this.onChangeCompany}
-				/>
+				label='Nombre de la empresa *'
+				data={data}
+				containerStyle={styles.picker}
+				onChangeText={this.onChangeCompany}
+			/>
 				
 		)
 	}

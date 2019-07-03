@@ -25,7 +25,6 @@ export class OpportunityService extends RestClient {
             opportunity
         }).then(result => {
             if(typeof result.data.opportunity !== 'undefined') {
-                console.log(result.data.opportunity);
                 return Promise.reject(result.data.opportunity);
             } else {
                 return Promise.reject(result.data);
