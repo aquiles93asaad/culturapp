@@ -68,6 +68,19 @@ export class OpportunityListScreen extends React.Component {
 		this.setState(state => ({ visible: !state.visible }));
 		this.setState({showFooter: false});
 	}
+
+	editOpportunity(opportunity)  {
+		this.opportunityService.update(opportunity)
+		.then(result => {
+			return result;
+		})
+		.catch(error => {
+			console.log(error);
+		});
+		this._hideModalEdit();
+		this.getOpportunities();
+		this.setState(state => ({ visible: !state.visible }));
+	}
 	
 	_showModalAsing = () => this.setState({ showModalAsing: true });
   	_hideModalAsing = () => this.setState({ showModalAsing: false });
@@ -114,8 +127,19 @@ export class OpportunityListScreen extends React.Component {
 		this.setState({showFooter: true});
 	}
 
-	showData(){
-		this.setState({ chosenOpportunity: { ...this.state.chosenOpportunity, digitization: !this.state.chosenOpportunity.digitization} });
+	showData(checkBoxName){
+		if (checkBoxName == 'digitization'){
+			this.setState({ chosenOpportunity: { ...this.state.chosenOpportunity, digitization: !this.state.chosenOpportunity.digitization} });
+		} 
+		else if (checkBoxName == 'automation') {
+			this.setState({ chosenOpportunity: { ...this.state.chosenOpportunity, automation: !this.state.chosenOpportunity.automation} });
+		}
+		else if (checkBoxName == 'hardware') {
+			this.setState({ chosenOpportunity: { ...this.state.chosenOpportunity, hardware: !this.state.chosenOpportunity.hardware} });
+		}
+		else {
+			this.setState({ chosenOpportunity: { ...this.state.chosenOpportunity, docManager: !this.state.chosenOpportunity.docManager} });
+		}
 	}
 
 	demoButton(){
@@ -306,10 +330,8 @@ export class OpportunityListScreen extends React.Component {
 				<CheckBox
 					style={styles.checkBox}
 					onClick={()=>{
-						this.showData(data.digitization)
-					// this.setState({
-					// 	chosenOpportunity:{digitization: !this.state.chosenOpportunity.digitization}
-					// })
+						const typeCheckBox = 'digitization';
+						this.showData(typeCheckBox);
 					}}
 					isChecked={this.state.chosenOpportunity.digitization}
 					rightText={"Digitalización"}
@@ -317,9 +339,8 @@ export class OpportunityListScreen extends React.Component {
 				<CheckBox
 					style={styles.checkBox}
 					onClick={()=>{
-					this.setState({
-						chosenOpportunity:{docManager: !this.state.chosenOpportunity.docManager}
-					})
+						const typeCheckBox = 'docManager';
+						this.showData(typeCheckBox);
 					}}
 					isChecked={this.state.chosenOpportunity.docManager}
 					rightText={"Gestor documental"}
@@ -327,9 +348,8 @@ export class OpportunityListScreen extends React.Component {
 				<CheckBox
 					style={styles.checkBox}
 					onClick={()=>{
-					this.setState({
-						chosenOpportunity:{hardware: !this.state.chosenOpportunity.hardware}
-					})
+						const typeCheckBox = 'hardware';
+						this.showData(typeCheckBox);
 					}}
 					isChecked={this.state.chosenOpportunity.hardware}
 					rightText={"Hardware"}
@@ -337,14 +357,13 @@ export class OpportunityListScreen extends React.Component {
 				<CheckBox
 					style={styles.checkBox}
 					onClick={()=>{
-					this.setState({
-						chosenOpportunity:{automation: !this.state.chosenOpportunity.automation}
-					})
+						const typeCheckBox = 'automation';
+						this.showData(typeCheckBox);
 					}}
 					isChecked={this.state.chosenOpportunity.automation}
 					rightText={"Automatización de procesos"}
 				/>
-				<Button style={styles.mt15} mode="contained" onPress={this.goStep2} theme={{ dark: true, colors: { primary: '#333366' } }}>
+				<Button style={styles.mt15} mode="contained" onPress={() => this.editOpportunity(this.state.chosenOpportunity)} theme={{ dark: true, colors: { primary: '#333366' } }}>
 					Siguiente
 				</Button>
 			</View>
