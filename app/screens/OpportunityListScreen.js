@@ -7,7 +7,8 @@ import {
 	ScrollView,
 	TouchableOpacity,
 } from 'react-native';
-import { List, Button, Snackbar, Modal } from 'react-native-paper';
+import { List, Button, Snackbar, Modal, TextInput } from 'react-native-paper';
+import CheckBox from 'react-native-check-box'
 import { Dropdown } from 'react-native-material-dropdown';
 import { OpportunityService } from '../services';
 import moment from "moment";
@@ -27,7 +28,10 @@ export class OpportunityListScreen extends React.Component {
 		chosenOpportunity: {},
 		showFooter: false,
 		visible : false,
-		showModal: false,
+		showModalAsing: false,
+		showModalEdit: false,
+		nameOpportunity: '',
+        descOpportunity: '',
 	}
 
 	opportunityService = null;
@@ -65,8 +69,10 @@ export class OpportunityListScreen extends React.Component {
 		this.setState({showFooter: false});
 	}
 	
-	_showModal = () => this.setState({ showModal: true });
-  	_hideModal = () => this.setState({ showModal: false });
+	_showModalAsing = () => this.setState({ showModalAsing: true });
+  	_hideModalAsing = () => this.setState({ showModalAsing: false });
+	_showModalEdit = () => this.setState({ showModalEdit: true });
+  	_hideModalEdit = () => this.setState({ showModalEdit: false });
     
     renderStateIcon = (state) => {
         switch (state) {
@@ -108,6 +114,10 @@ export class OpportunityListScreen extends React.Component {
 		this.setState({showFooter: true});
 	}
 
+	showData(){
+		this.setState({ chosenOpportunity: { ...this.state.chosenOpportunity, digitization: !this.state.chosenOpportunity.digitization} });
+	}
+
 	demoButton(){
 		if(this.state.chosenOpportunity.state == 'active'){
 			return (
@@ -129,7 +139,7 @@ export class OpportunityListScreen extends React.Component {
 		if(this.state.chosenOpportunity.state == 'active'){
 			return (
 				<View style={{marginRight:15}}>
-					<TouchableOpacity activeOpacity={0.5}>
+					<TouchableOpacity activeOpacity={0.5} onPress={() => this._showModalEdit()}>
 						<Image
 						source={require('../../assets/images/opportunity-edit.png')}
 						style={{width:35, height:35}}
@@ -144,7 +154,7 @@ export class OpportunityListScreen extends React.Component {
 		if(this.state.chosenOpportunity.state == 'active'){
 			return (
 				<View style={{marginRight:15}}>
-					<TouchableOpacity activeOpacity={0.5} onPress={() => this._showModal()}>
+					<TouchableOpacity activeOpacity={0.5} onPress={() => this._showModalAsing()}>
 						<Image
 						source={require('../../assets/images/opportunity-asing-user.png')}
 						style={{width:35, height:35}}
@@ -243,29 +253,107 @@ export class OpportunityListScreen extends React.Component {
 		  }, {
 			value: 'Pear',
 		  }];
-		// let data = [];
-		// for (let i = 0; i < this.state.clients.length; i++) {
-			// this.setState({ dataSelect: [...this.state.dataSelect , {"value" : this.state.companies[i].name, "id" :  this.state.companies[i]._id }]})
-		// 	data.push( {"value" : this.state.clients[i].name, "id" :  this.state.clients[i]._id })
-		// }
-		// this.state.companies.map((data) => {
-		// 	this.setState({ dataSelect: [...this.state.dataSelect , {"value" : data.name, "id" :  data._id }]})
-		// })
 		return ( 
 			<View>
-				<Text>Asignar oportunidad a</Text>
+				<Text style={styles.title}>Asignar oportunidad a</Text>
 				<Dropdown
 					label='Participantes'
 					data={data}
 					containerStyle={styles.picker}
 					// onChangeText={this.onChangeCompany}
 				/>
+				<Button 
+				style={styles.mt15} 
+				mode="contained" 
+				// onPress={}
+				theme={{ dark: true, colors: { primary: '#333366' } }}>
+					Confirmar
+				</Button>
+			</View>
+		)
+	}
+
+	showEdit = () => {
+		let data = [{
+			value: 'Banana',
+		  }, {
+			value: 'Mango',
+		  }, {
+			value: 'Pear',
+		  }];
+		return ( 
+			<View>
+				<Text style={styles.title}>Editar oportunidad</Text>
+				<Dropdown
+					label='Participantes'
+					data={data}
+					containerStyle={styles.picker}
+					// onChangeText={this.onChangeCompany}
+				/>
+				<TextInput
+					label='Nombre de la oportunidad'
+					value={this.state.chosenOpportunity.name}
+					style={{backgroundColor:'white', height: 50, width: 250}}
+					onChangeText={(newName) => this.setState({ chosenOpportunity: { ...this.state.chosenOpportunity, name: newName} })}
+				/>
+				<TextInput
+					label='Descripción'
+					multiline={true}
+					numberOfLines={4}
+					style={{backgroundColor:'white', height: 50, width: 250}}
+					onChangeText={(newDescription) => this.setState({ chosenOpportunity: { ...this.state.chosenOpportunity, description: newDescription} })}
+					value={this.state.chosenOpportunity.description}/>
+				<CheckBox
+					style={styles.checkBox}
+					onClick={()=>{
+						this.showData(data.digitization)
+					// this.setState({
+					// 	chosenOpportunity:{digitization: !this.state.chosenOpportunity.digitization}
+					// })
+					}}
+					isChecked={this.state.chosenOpportunity.digitization}
+					rightText={"Digitalización"}
+				/>
+				<CheckBox
+					style={styles.checkBox}
+					onClick={()=>{
+					this.setState({
+						chosenOpportunity:{docManager: !this.state.chosenOpportunity.docManager}
+					})
+					}}
+					isChecked={this.state.chosenOpportunity.docManager}
+					rightText={"Gestor documental"}
+				/>
+				<CheckBox
+					style={styles.checkBox}
+					onClick={()=>{
+					this.setState({
+						chosenOpportunity:{hardware: !this.state.chosenOpportunity.hardware}
+					})
+					}}
+					isChecked={this.state.chosenOpportunity.hardware}
+					rightText={"Hardware"}
+				/>
+				<CheckBox
+					style={styles.checkBox}
+					onClick={()=>{
+					this.setState({
+						chosenOpportunity:{automation: !this.state.chosenOpportunity.automation}
+					})
+					}}
+					isChecked={this.state.chosenOpportunity.automation}
+					rightText={"Automatización de procesos"}
+				/>
+				<Button style={styles.mt15} mode="contained" onPress={this.goStep2} theme={{ dark: true, colors: { primary: '#333366' } }}>
+					Siguiente
+				</Button>
 			</View>
 		)
 	}
 	
 	render() {
-		const visible = this.state.showModal;
+		const asignUser = this.state.showModalAsing;
+		const editOpportunity = this.state.showModalEdit;
 		return (
 			<View>
 				<ScrollView  
@@ -288,8 +376,11 @@ export class OpportunityListScreen extends React.Component {
 				>
 					Se actualizo la oportunidad
 				</Snackbar>
-				<Modal visible={visible} onDismiss={this._hideModal} contentContainerStyle={{height: 500, backgroundColor:'white'}}>
+				<Modal visible={asignUser} onDismiss={this._hideModalAsing} contentContainerStyle={{height: 300, backgroundColor:'white', justifyContent: 'center', alignItems: 'center'}}>
 					{this.showAsing()}
+				</Modal>
+				<Modal visible={editOpportunity} onDismiss={this._hideModalEdit} contentContainerStyle={{height: 450, backgroundColor:'white', justifyContent: 'center', alignItems: 'center'}}>
+					{this.showEdit()}
 				</Modal>
 			</View>
 		);
@@ -339,4 +430,13 @@ const styles = StyleSheet.create({
 	picker: {
 		width: 250,
 	},
+	title: {
+		fontSize: 15,
+		textAlign: 'center',
+		color: '#333366',
+		fontWeight: 'bold',
+	},
+	checkBox:{
+        marginTop: 15,
+    },
 });
