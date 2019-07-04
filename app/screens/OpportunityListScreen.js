@@ -207,7 +207,7 @@ export class OpportunityListScreen extends React.Component {
 
 	wonButton(){
 		const won = 'won';
-		if(this.state.chosenOpportunity.state == 'active'){
+		if(this.state.chosenOpportunity.state == 'active' ){
 			return (
 				<View style={{marginRight:15}}>
 					<TouchableOpacity activeOpacity={0.5} onPress={() => this.updateOpportunities(this.state.chosenOpportunity._id, won)}>
@@ -254,6 +254,7 @@ export class OpportunityListScreen extends React.Component {
 	}
 
 	renderFooter() {
+		console.log(this.state.chosenOpportunity);
 		if(this.state.showFooter && (this.state.chosenOpportunity.state && this.state.chosenOpportunity.state != 'won')) {
 			return (
 				<View style={styles.bottomView}>
@@ -307,7 +308,7 @@ export class OpportunityListScreen extends React.Component {
 		  }];
 		return ( 
 			<View>
-				<Text style={styles.title}>Editar oportunidad</Text>
+				<Text style={styles.title}>Editar {this.state.chosenOpportunity.name}</Text>
 				<Dropdown
 					label='Participantes'
 					data={data}
