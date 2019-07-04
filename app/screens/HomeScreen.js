@@ -21,7 +21,7 @@ export class HomeScreen extends React.Component {
     };
 
     redirectSaleOpportunity = () => {
-        this.props.navigation.navigate('SaleOpportunity');
+        this.props.navigation.navigate('SaleOpportunity', {prueba: 'hola'});
     };
 
     redirectReports = () => {

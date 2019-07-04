@@ -22,9 +22,10 @@ export class SplashScreen extends React.Component {
     // Fetch the token from storage then navigate to our appropriate place
     _bootstrapAsync = async () => {
         let naviageTo = '';
+        let userLogged = null;
         await this.authService.me()
         .then(user => {
-            // this.setState({ user: user })
+            userLogged = user;
             naviageTo = 'App';
         }).catch(error => {
             console.log(error);
@@ -34,7 +35,11 @@ export class SplashScreen extends React.Component {
             // screen will be unmounted and thrown away.
             this.setState({ progress: 1 });
             StatusBar.setHidden(true, 'none');
-            this.props.navigation.navigate(naviageTo);
+            console.log(userLogged);
+            this.props.navigation.navigate(naviageTo, { user: userLogged});
+            // this.props.navigattion.dispatch(
+            //     NavigationActions.navigate(naviageTo, { user: userLogged})
+            // );
         })
     };
 

@@ -26,6 +26,10 @@ export class SaleOpportunityScreen extends React.Component {
         await this.getCompanies();
     }
 
+    componentDidMount() {
+        console.log("NAV: ", this.props.navigation);
+    }
+
     createServiceInstance = async() => {
         this.companyService = new CompanyService(true);
     }
@@ -61,7 +65,6 @@ export class SaleOpportunityScreen extends React.Component {
 				containerStyle={styles.picker}
 				onChangeText={this.onChangeCompany}
 			/>
-				
 		)
 	}
 

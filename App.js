@@ -5,8 +5,7 @@ import AppNavigator from './app/navigation/AppNavigator';
 
 export default class App extends React.Component {
     state = {
-        isLoadingComplete: false,
-        user: null
+        isLoadingComplete: false
     };
 
     render() {
