@@ -2,61 +2,26 @@ import React from 'react';
 import { Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Card } from 'react-native-paper';
 
-export class HomeScreen extends React.Component {
+export class ProfileScreen extends React.Component {
 
-    static navigationOptions = ({ navigation }) => {
-        return {
-            headerLeft: (
-                <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-                    <Image style={{alignSelf: 'center', width:30, height:30 , resizeMode:'contain', marginLeft: 10}} source={require('../../assets/images/profile_icon.png')}/>
-                </TouchableOpacity>
-            ),
-        };
-    };
+    // static navigationOptions = ({ navigation }) => {
+    //     return {
+    //         headerLeft: (
+    //             <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+    //                 <Image style={{alignSelf: 'center', width:30, height:30 , resizeMode:'contain', marginLeft: 10}} source={require('../../assets/images/profile_icon.png')}/>
+    //             </TouchableOpacity>
+    //         ),
+    //     };
+    // };
 
     state = {
         user: this.props.navigation.getParam('user')
     }
 
-    redirectSaleOpportunity = () => {
-        this.props.navigation.navigate('SaleOpportunity');
-    };
-
-    redirectReports = () => {
-        this.props.navigation.navigate('Reports');
-    };
-
-    redirectOpportunity = () => {
-        this.props.navigation.navigate('OpportunityList');
-    };
-
     render() {
         return (
-            <View style={styles.container}>
-                <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-                    <Text style={styles.paragraph}>Bienvenido {this.state.user.name}</Text>
-                    <View
-                        contentContainerStyle={styles.rootContainer}>
-                        <TouchableOpacity onPress={() => this.redirectSaleOpportunity()}>
-                            <Card style={styles.card} >
-                                <Card.Title style={styles.cardTitle} title="Generar oportunidad" left={() => <Image style={{ width: 48, height: 48 }} source={require('../../assets/images/sale-opportunity-blue.png')} />} />
-                            </Card>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.redirectOpportunity()}>
-                            <Card style={styles.card}>
-                                <Card.Title style={styles.cardTitle} title="Seguimiento de oportunidad" left={() => <Image style={{ width: 48, height: 48 }} source={require('../../assets/images/opportunities-list-blue.png')} />} />
-                            </Card>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.redirectReports()}>
-                            <Card style={styles.card}>
-                                <Card.Title style={styles.cardTitle} title="Reportes" left={() => <Image style={{ width: 48, height: 48 }} source={require('../../assets/images/reports-blue.png')} />} />
-                            </Card>
-                        </TouchableOpacity>
-                        {/* <Button style={styles.mt15} mode="contained" onPress={this.onLogoutButtonPressed} theme={{ dark: true, colors: { primary: '#333366' } }}>
-                            Logout
-                        </Button> */}
-                    </View>
-                </ScrollView>
+            <View>
+                
             </View>
         );
     }

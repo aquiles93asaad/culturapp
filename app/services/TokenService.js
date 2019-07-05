@@ -35,7 +35,7 @@ export default class TokenService {
         if (token) {
             try {
                 await SecureStore.setItemAsync('AuthToken', JSON.stringify(token));
-                this.saveAuthToken(token);
+                console.log('se guardó');
             } catch (error) {
                 return Promise.reject("Could not save the token");
             }
@@ -45,7 +45,7 @@ export default class TokenService {
     deleteToken = async () => {
         try {
             await SecureStore.deleteItemAsync('AuthToken');
-            this.deleteAuthToken();
+            console.log('lo borró');
         } catch (error) {
             return Promise.reject("Could not delete the token");
         }

@@ -19,19 +19,14 @@ export class SaleOpportunityScreen extends React.Component {
 		selectedClientId: '',
     }
     
-    companyService = null;
+    companyService = new CompanyService(true);
 
     componentWillMount = async() => {
-        await this.createServiceInstance();
         await this.getCompanies();
     }
 
     componentDidMount() {
-        console.log("NAV: ", this.props.navigation);
-    }
-
-    createServiceInstance = async() => {
-        this.companyService = new CompanyService(true);
+        // console.log("NAV: ", this.props.navigation);
     }
 
 	getCompanies = async() => {
@@ -72,7 +67,6 @@ export class SaleOpportunityScreen extends React.Component {
 		this.setState({selectedClientId: this.state.clients[index]._id});
 	}
 	goStep1 = () => {
-		console.log(this.state.firstData);
 		this.props.navigation.navigate('SaleOpportunity2', {data: this.state.selectedClientId});
     };
 

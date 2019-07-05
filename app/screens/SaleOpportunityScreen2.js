@@ -38,10 +38,6 @@ export class SaleOpportunityScreen2 extends React.Component {
     }
 
 	goStep2 = () => {
-        console.log(this.state.docManager);
-        console.log(this.state.digitization);
-        console.log(this.state.nameOpportunity);
-        console.log(this.state.descOpportunity);
         if(this.state.nameOpportunity != '' && this.state.descOpportunity != '' && (this.state.docManager == true || this.state.digitization == true)){
             let opportunity = [];
             opportunity.push({
