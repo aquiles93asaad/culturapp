@@ -1,141 +1,80 @@
 import React from 'react';
-import { Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Card } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { TextInput, Button } from 'react-native-paper';
 
 export class ProfileScreen extends React.Component {
 
-    // static navigationOptions = ({ navigation }) => {
-    //     return {
-    //         headerLeft: (
-    //             <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-    //                 <Image style={{alignSelf: 'center', width:30, height:30 , resizeMode:'contain', marginLeft: 10}} source={require('../../assets/images/profile_icon.png')}/>
-    //             </TouchableOpacity>
-    //         ),
-    //     };
-    // };
-
     state = {
-        user: this.props.navigation.getParam('user')
+        user: this.props.navigation.getParam('user'),
+        password: '',
+        repeatPassword: ''
     }
 
     render() {
         return (
-            <View>
-                
+            <View style={styles.content} onStartShouldSetResponder={() => true} onResponderRelease={() => Keyboard.dismiss()}>
+                <TextInput
+                    label='Email'
+                    value={this.state.user.email}
+                    onChangeText={email => this.setState({ email })}
+                    style={styles.input}
+                    theme={{ dark: true, colors: { primary: '#333366' } }}
+                />
+                <TextInput
+                    label='Nombre'
+                    value={this.state.user.name}
+                    onChangeText={password => this.setState({ password })}
+                    style={styles.input}
+                    theme={{ dark: true, colors: { primary: '#333366' } }}
+                />
+                <TextInput
+                    label='Apellido'
+                    value={this.state.user.lastName}
+                    onChangeText={email => this.setState({ email })}
+                    style={styles.input}
+                    theme={{ dark: true, colors: { primary: '#333366' } }}
+                />
+                <TextInput
+                    label='Teléfono/Celular'
+                    value={this.state.user.phone}
+                    onChangeText={email => this.setState({ email })}
+                    style={styles.input}
+                    theme={{ dark: true, colors: { primary: '#333366' } }}
+                />
+                <TextInput
+                    label='Nueva contraseña'
+                    secureTextEntry={true}
+                    value={this.state.password}
+                    onChangeText={email => this.setState({ email })}
+                    style={styles.input}
+                    theme={{ dark: true, colors: { primary: '#333366' } }}
+                />
+                <TextInput
+                    label='Confrimar nueva contraseña'
+                    secureTextEntry={true}
+                    value={this.state.repeatPassword}
+                    onChangeText={email => this.setState({ email })}
+                    style={styles.input}
+                    theme={{ dark: true, colors: { primary: '#333366' } }}
+                />
+                <Button style={styles.mt15} mode="contained" onPress={this.onLoginButtonPressed} theme={{ dark: true, colors: { primary: '#333366' } }}>
+                    Actualizar
+                </Button>
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
+    input: {
+        marginBottom: 10
+    },
+    content: {
+        justifyContent: 'space-between',
         flex: 1,
-        backgroundColor: '#fff',
+        padding: 30
     },
-    developmentModeText: {
-        marginBottom: 20,
-        color: 'rgba(0,0,0,0.4)',
-        fontSize: 14,
-        lineHeight: 19,
-        textAlign: 'center',
-    },
-    contentContainer: {
-        paddingTop: 30,
-    },
-    welcomeContainer: {
-        alignItems: 'center',
-        marginTop: 10,
-        marginBottom: 20,
-    },
-    welcomeImage: {
-        width: 100,
-        height: 80,
-        resizeMode: 'contain',
-        marginTop: 3,
-        marginLeft: -10,
-    },
-    getStartedContainer: {
-        alignItems: 'center',
-        marginHorizontal: 50,
-    },
-    homeScreenFilename: {
-        marginVertical: 7,
-    },
-    codeHighlightText: {
-        color: 'rgba(96,100,109, 0.8)',
-    },
-    codeHighlightContainer: {
-        backgroundColor: 'rgba(0,0,0,0.05)',
-        borderRadius: 3,
-        paddingHorizontal: 4,
-    },
-    getStartedText: {
-        fontSize: 17,
-        color: 'rgba(96,100,109, 1)',
-        lineHeight: 24,
-        textAlign: 'center',
-    },
-    tabBarInfoContainer: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        ...Platform.select({
-            ios: {
-                shadowColor: 'black',
-                shadowOffset: { height: -3 },
-                shadowOpacity: 0.1,
-                shadowRadius: 3,
-            },
-            android: {
-                elevation: 20,
-            },
-        }),
-        alignItems: 'center',
-        backgroundColor: '#fbfbfb',
-        paddingVertical: 20,
-    },
-    tabBarInfoText: {
-        fontSize: 17,
-        color: 'rgba(96,100,109, 1)',
-        textAlign: 'center',
-    },
-    navigationFilename: {
-        marginTop: 5,
-    },
-    helpContainer: {
-        marginTop: 15,
-        alignItems: 'center',
-    },
-    helpLink: {
-        paddingVertical: 15,
-    },
-    helpLinkText: {
-        fontSize: 14,
-        color: '#2e78b7',
-    },
-    root: {
-        // backgroundColor: theme.colors.screen.scroll,
-        // padding: paddingValue,
-    },
-    rootContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-    },
-    card: {
-        marginBottom: 20,
-    },
-    paragraph: {
-        marginBottom: 10,
-        fontSize: 20,
-        textAlign: 'center',
-        color: '#333366',
-        fontWeight: 'bold',
-    },
-    cardTitle: {
-        height: 150,
-    },
-    mt15: {
+    mt15:{
         marginTop: 15,
         borderRadius: 20,
         borderWidth: 1,

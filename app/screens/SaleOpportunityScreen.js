@@ -9,24 +9,20 @@ import { Button } from 'react-native-paper';
 import { CompanyService } from '../services';
 
 export class SaleOpportunityScreen extends React.Component {
-	// static navigationOptions = {
-	// 	title: 'Generar oportunidad',
-    // };
-    
     state = {
 		clients: [],
-		// dataSelect: '',
 		selectedClientId: '',
     }
-    
-    companyService = new CompanyService(true);
+
+    companyService = null;
 
     componentWillMount = async() => {
+        await this.createCompanyService();
         await this.getCompanies();
     }
 
-    componentDidMount() {
-        // console.log("NAV: ", this.props.navigation);
+    createCompanyService = async() => {
+        this.companyService = new CompanyService(true);
     }
 
 	getCompanies = async() => {
@@ -47,12 +43,9 @@ export class SaleOpportunityScreen extends React.Component {
     showList = () => {
 		let data = [];
 		for (let i = 0; i < this.state.clients.length; i++) {
-			// this.setState({ dataSelect: [...this.state.dataSelect , {"value" : this.state.companies[i].name, "id" :  this.state.companies[i]._id }]})
 			data.push( {"value" : this.state.clients[i].name, "id" :  this.state.clients[i]._id })
-		}
-		// this.state.companies.map((data) => {
-		// 	this.setState({ dataSelect: [...this.state.dataSelect , {"value" : data.name, "id" :  data._id }]})
-		// })
+        }
+        
 		return ( 
 			<Dropdown
 				label='Nombre de la empresa *'
@@ -65,7 +58,8 @@ export class SaleOpportunityScreen extends React.Component {
 
 	onChangeCompany = (args, index, data) => {
 		this.setState({selectedClientId: this.state.clients[index]._id});
-	}
+    }
+    
 	goStep1 = () => {
 		this.props.navigation.navigate('SaleOpportunity2', {data: this.state.selectedClientId});
     };

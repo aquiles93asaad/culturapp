@@ -89,9 +89,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         flex: 1,
     },
-    save: {
-        marginVertical: 20,
-    },
     mt15:{
         marginTop: 15,
         borderRadius: 20,
