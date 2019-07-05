@@ -21,7 +21,7 @@ const AppStack = createStackNavigator(
         defaultNavigationOptions: ({ navigation }) => ({
             headerTitle: (
                 <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-                    <Image style={{width: 250, height: 40, marginBottom: 10, resizeMode:'contain'}} source={require('../../assets/images/logo_home.png')}/>
+                    <Image style={{width: 220, height: 35, marginBottom: 10, resizeMode:'contain'}} source={require('../../assets/images/logo_home.png')}/>
                 </TouchableOpacity>
             ),
             headerLeft:(
