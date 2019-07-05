@@ -25,6 +25,9 @@ export class LoginScreen extends React.Component {
         
         this.authService.login(params)
         .then(user => {
+            this.props.navigation.setParams({
+                user: user
+            });
             this.props.navigation.navigate('App');
         })
         .catch(error => {
