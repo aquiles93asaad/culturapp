@@ -27,7 +27,7 @@ export class HomeScreen extends React.Component {
     };
 
     redirectOpportunity = () => {
-        this.props.navigation.navigate('OpportunityList');
+        this.props.navigation.navigate('OpportunityList', {user: this.state.user});
     };
 
     render() {
