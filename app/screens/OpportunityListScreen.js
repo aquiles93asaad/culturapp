@@ -10,8 +10,9 @@ import {
 import { List, Button, Snackbar, Modal, TextInput } from 'react-native-paper';
 import CheckBox from 'react-native-check-box'
 import { Dropdown } from 'react-native-material-dropdown';
-import { OpportunityService } from '../services';
+import { OpportunityService, CompanyService } from '../services';
 import moment from "moment";
+import { TapGestureHandler } from 'react-native-gesture-handler';
 
 export class OpportunityListScreen extends React.Component {
 	// static navigationOptions = {
@@ -26,6 +27,7 @@ export class OpportunityListScreen extends React.Component {
 	state = {
 		allOpportunities: [],
 		chosenOpportunity: {},
+		clients: [],
 		showFooter: false,
 		visible : false,
 		showModalAsing: false,
@@ -39,10 +41,31 @@ export class OpportunityListScreen extends React.Component {
 	componentWillMount = async() => {
 		await this.createServiceInstance();
 		await this.getOpportunities();
+		await this.getCompanies();
     }
 
 	createServiceInstance = async() => {
         this.opportunityService = new OpportunityService(true);
+        this.companyService = new CompanyService(true);
+	}
+
+	getCompanies = async() => {
+		const filters = {
+            isClient: true
+        }
+		
+		await this.companyService.getCompanies(filters)
+		.then(companies => {
+			this.setState({ clients: [...companies ] });
+            return companies;
+        })
+        .catch(error => {
+            console.log(error);
+        });
+	};
+	
+	onChangeCompany = (args, index, data) => {
+		this.setState({selectedClientId: this.state.clients[index]._id});
 	}
 
 	getOpportunities = async() => {
@@ -298,19 +321,19 @@ export class OpportunityListScreen extends React.Component {
 	}
 
 	showEdit = () => {
-		let data = [{
-			value: 'Banana',
-		  }, {
-			value: 'Mango',
-		  }, {
-			value: 'Pear',
-		  }];
+		// this.getCompanies();
+		console.log(this.state.chosenOpportunity);
+		let data = [];
+		for (let i = 0; i < this.state.clients.length; i++) {
+			data.push( {"value" : this.state.clients[i].name, "id" :  this.state.clients[i]._id })
+		}
 		return ( 
 			<View>
 				<Text style={styles.title}>Editar {this.state.chosenOpportunity.name}</Text>
 				<Dropdown
-					label='Participantes'
+					label='Cliente'
 					data={data}
+					value={this.state.chosenOpportunity.name}
 					containerStyle={styles.picker}
 					// onChangeText={this.onChangeCompany}
 				/>
