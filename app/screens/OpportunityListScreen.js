@@ -10,7 +10,7 @@ import {
 import { List, Button, Snackbar, Modal, TextInput } from 'react-native-paper';
 import CheckBox from 'react-native-check-box'
 import { Dropdown } from 'react-native-material-dropdown';
-import { OpportunityService, CompanyService } from '../services';
+import { OpportunityService, CompanyService , UserService} from '../services';
 import moment from "moment";
 import { TapGestureHandler } from 'react-native-gesture-handler';
 
@@ -25,15 +25,17 @@ export class OpportunityListScreen extends React.Component {
     }
 
 	state = {
+		user: this.props.navigation.getParam('user'),
 		allOpportunities: [],
 		chosenOpportunity: {},
 		clients: [],
+		usersCompany: [],
 		showFooter: false,
 		visible : false,
 		showModalAsing: false,
 		showModalEdit: false,
 		nameOpportunity: '',
-        descOpportunity: '',
+		descOpportunity: '',
 	}
 
 	opportunityService = null;
@@ -47,6 +49,7 @@ export class OpportunityListScreen extends React.Component {
 	createServiceInstance = async() => {
         this.opportunityService = new OpportunityService(true);
         this.companyService = new CompanyService(true);
+        this.userService = new UserService(true);
 	}
 
 	getCompanies = async() => {
@@ -63,12 +66,31 @@ export class OpportunityListScreen extends React.Component {
             console.log(error);
         });
 	};
-	
-	onChangeCompany = (args, index, data) => {
-		this.setState({selectedClientId: this.state.clients[index]._id});
-	}
+
+	getUsers = async() => {
+		let filters = null;
+		if (this.state.user.roles.includes('SUPERVISOR')) {
+			filters = {
+				supervisor: user._id
+			}
+		} else if (user.roles.includes('LIDER')) {
+			filters = {
+				userCompany: user.userCompany._id
+			}
+		}
+		
+		await this.userService.get(filters)
+		.then(users => {
+			this.setState({ usersCompany: [...users ] });
+            return users;
+        })
+        .catch(error => {
+            console.log(error);
+        });
+	};
 
 	getOpportunities = async() => {
+		console.log(this.state.user);
 		await this.opportunityService.get({}, true)
 		.then(opportunities => {
 			this.setState({ allOpportunities: [...opportunities ] });
@@ -108,7 +130,10 @@ export class OpportunityListScreen extends React.Component {
 	_showModalAsing = () => this.setState({ showModalAsing: true });
   	_hideModalAsing = () => this.setState({ showModalAsing: false });
 	_showModalEdit = () => this.setState({ showModalEdit: true });
-  	_hideModalEdit = () => this.setState({ showModalEdit: false });
+  	_hideModalEdit = () => {
+		  this.setState({ showModalEdit: false });
+		  this.setState({ showFooter: false });
+		}
     
     renderStateIcon = (state) => {
         switch (state) {
@@ -198,7 +223,9 @@ export class OpportunityListScreen extends React.Component {
 	}
 
 	asingUserButton(){
-		if(this.state.chosenOpportunity.state == 'active'){
+		console.log(this.state.chosenOpportunity);
+		if(this.state.chosenOpportunity.state == 'active' && (this.state.user.roles.includes('LIDER') || this.state.user.roles.includes('SUPERVISOR'))){
+		// if(this.state.chosenOpportunity.state == 'active'){
 			return (
 				<View style={{marginRight:15}}>
 					<TouchableOpacity activeOpacity={0.5} onPress={() => this._showModalAsing()}>
@@ -291,8 +318,18 @@ export class OpportunityListScreen extends React.Component {
 			)
 		}
 	}
+
+	onChangeCompany = (args, index, data) => {
+		if (this.state.chosenOpportunity.companyClient._id != this.state.clients[index]._id){
+			this.setState({ chosenOpportunity: { ...this.state.chosenOpportunity, companyClient:  { ...this.state.chosenOpportunity.companyClient, _id: this.state.clients[index]._id}} });
+		}
+    }
 	
 	showAsing = () => {
+		// let data = [];
+		// for (let i = 0; i < this.state.data.userCompany.users.length; i++) {
+		// 	data.push( {"value" : this.state.clients[i].name, "id" :  this.state.clients[i]._id })
+		// }
 		let data = [{
 			value: 'Banana',
 		  }, {
@@ -321,81 +358,86 @@ export class OpportunityListScreen extends React.Component {
 	}
 
 	showEdit = () => {
-		// this.getCompanies();
-		console.log(this.state.chosenOpportunity);
-		let data = [];
-		for (let i = 0; i < this.state.clients.length; i++) {
-			data.push( {"value" : this.state.clients[i].name, "id" :  this.state.clients[i]._id })
+		if(this.state.showModalEdit) {
+			let data = [];
+			for (let i = 0; i < this.state.clients.length; i++) {
+				data.push( {"value" : this.state.clients[i].name, "id" :  this.state.clients[i]._id })
+			}
+			return ( 
+				<View>
+					<Text style={styles.title}>Editar {this.state.chosenOpportunity.name}</Text>
+					<Dropdown
+						label='Cliente'
+						data={data}
+						value={this.state.chosenOpportunity.companyClient.name}
+						containerStyle={styles.picker}
+						onChangeText={this.onChangeCompany}
+					/>
+					<TextInput
+						label='Nombre de la oportunidad'
+						value={this.state.chosenOpportunity.name}
+						style={{backgroundColor:'white', height: 50, width: 250}}
+						onChangeText={(newName) => this.setState({ chosenOpportunity: { ...this.state.chosenOpportunity, name: newName} })}
+					/>
+					<TextInput
+						label='Descripción'
+						multiline={true}
+						numberOfLines={4}
+						style={{backgroundColor:'white', height: 50, width: 250}}
+						onChangeText={(newDescription) => this.setState({ chosenOpportunity: { ...this.state.chosenOpportunity, description: newDescription} })}
+						value={this.state.chosenOpportunity.description}/>
+					<CheckBox
+						style={styles.checkBox}
+						onClick={()=>{
+							const typeCheckBox = 'digitization';
+							this.showData(typeCheckBox);
+						}}
+						isChecked={this.state.chosenOpportunity.digitization}
+						rightText={"Digitalización"}
+					/>
+					<CheckBox
+						style={styles.checkBox}
+						onClick={()=>{
+							const typeCheckBox = 'docManager';
+							this.showData(typeCheckBox);
+						}}
+						isChecked={this.state.chosenOpportunity.docManager}
+						rightText={"Gestor documental"}
+					/>
+					<CheckBox
+						style={styles.checkBox}
+						onClick={()=>{
+							const typeCheckBox = 'hardware';
+							this.showData(typeCheckBox);
+						}}
+						isChecked={this.state.chosenOpportunity.hardware}
+						rightText={"Hardware"}
+					/>
+					<CheckBox
+						style={styles.checkBox}
+						onClick={()=>{
+							const typeCheckBox = 'automation';
+							this.showData(typeCheckBox);
+						}}
+						isChecked={this.state.chosenOpportunity.automation}
+						rightText={"Automatización de procesos"}
+					/>
+					<Button style={styles.mt15} mode="contained" onPress={() => this.editOpportunity(this.state.chosenOpportunity)} theme={{ dark: true, colors: { primary: '#333366' } }}>
+						Siguiente
+					</Button>
+					<TouchableOpacity 
+						activeOpacity={0.5}
+						onPress={this._hideModalEdit}
+						>
+						<Text style={styles.cancelButton}>Cancelar</Text>
+					</TouchableOpacity>
+				</View>
+			)
 		}
-		return ( 
-			<View>
-				<Text style={styles.title}>Editar {this.state.chosenOpportunity.name}</Text>
-				<Dropdown
-					label='Cliente'
-					data={data}
-					value={this.state.chosenOpportunity.name}
-					containerStyle={styles.picker}
-					// onChangeText={this.onChangeCompany}
-				/>
-				<TextInput
-					label='Nombre de la oportunidad'
-					value={this.state.chosenOpportunity.name}
-					style={{backgroundColor:'white', height: 50, width: 250}}
-					onChangeText={(newName) => this.setState({ chosenOpportunity: { ...this.state.chosenOpportunity, name: newName} })}
-				/>
-				<TextInput
-					label='Descripción'
-					multiline={true}
-					numberOfLines={4}
-					style={{backgroundColor:'white', height: 50, width: 250}}
-					onChangeText={(newDescription) => this.setState({ chosenOpportunity: { ...this.state.chosenOpportunity, description: newDescription} })}
-					value={this.state.chosenOpportunity.description}/>
-				<CheckBox
-					style={styles.checkBox}
-					onClick={()=>{
-						const typeCheckBox = 'digitization';
-						this.showData(typeCheckBox);
-					}}
-					isChecked={this.state.chosenOpportunity.digitization}
-					rightText={"Digitalización"}
-				/>
-				<CheckBox
-					style={styles.checkBox}
-					onClick={()=>{
-						const typeCheckBox = 'docManager';
-						this.showData(typeCheckBox);
-					}}
-					isChecked={this.state.chosenOpportunity.docManager}
-					rightText={"Gestor documental"}
-				/>
-				<CheckBox
-					style={styles.checkBox}
-					onClick={()=>{
-						const typeCheckBox = 'hardware';
-						this.showData(typeCheckBox);
-					}}
-					isChecked={this.state.chosenOpportunity.hardware}
-					rightText={"Hardware"}
-				/>
-				<CheckBox
-					style={styles.checkBox}
-					onClick={()=>{
-						const typeCheckBox = 'automation';
-						this.showData(typeCheckBox);
-					}}
-					isChecked={this.state.chosenOpportunity.automation}
-					rightText={"Automatización de procesos"}
-				/>
-				<Button style={styles.mt15} mode="contained" onPress={() => this.editOpportunity(this.state.chosenOpportunity)} theme={{ dark: true, colors: { primary: '#333366' } }}>
-					Siguiente
-				</Button>
-			</View>
-		)
 	}
 	
 	render() {
 		const asignUser = this.state.showModalAsing;
-		const editOpportunity = this.state.showModalEdit;
 		return (
 			<View>
 				<ScrollView  
@@ -421,7 +463,7 @@ export class OpportunityListScreen extends React.Component {
 				<Modal visible={asignUser} onDismiss={this._hideModalAsing} contentContainerStyle={{height: 300, backgroundColor:'white', justifyContent: 'center', alignItems: 'center'}}>
 					{this.showAsing()}
 				</Modal>
-				<Modal visible={editOpportunity} onDismiss={this._hideModalEdit} contentContainerStyle={{height: 450, backgroundColor:'white', justifyContent: 'center', alignItems: 'center'}}>
+				<Modal visible={this.state.showModalEdit} contentContainerStyle={{height: 450, backgroundColor:'white', justifyContent: 'center', alignItems: 'center'}}>
 					{this.showEdit()}
 				</Modal>
 			</View>
@@ -480,5 +522,11 @@ const styles = StyleSheet.create({
 	},
 	checkBox:{
         marginTop: 15,
-    },
+	},
+	cancelButton: {
+		marginTop: 15,
+		fontSize: 15,
+		textAlign: 'center',
+		color: 'grey',
+	},
 });
