@@ -1,4 +1,5 @@
 export * from './HomeScreen';
+export * from './ProfileScreen';
 export * from './SaleOpportunityScreen';
 export * from './LoginScreen';
 export * from './SettingsScreen';

@@ -25,10 +25,9 @@ export class LoginScreen extends React.Component {
         
         this.authService.login(params)
         .then(user => {
-            this.props.navigation.setParams({
-                user: user
-            });
-            this.props.navigation.navigate('App');
+            this.state.email = '';
+            this.state.password = '';
+            this.props.navigation.navigate('Home', { user: user});
         })
         .catch(error => {
             alert(error);
@@ -89,9 +88,6 @@ const styles = StyleSheet.create({
     content: {
         justifyContent: 'space-between',
         flex: 1,
-    },
-    save: {
-        marginVertical: 20,
     },
     mt15:{
         marginTop: 15,
