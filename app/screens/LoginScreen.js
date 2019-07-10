@@ -1,51 +1,60 @@
 import React from 'react';
-import { View, Image, Keyboard, StyleSheet, ScrollView } from 'react-native';
+import { Image, Keyboard, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { AuthService } from '../services';
+import CheckBox from 'react-native-check-box'
 
 export class LoginScreen extends React.Component {
     constructor(props) {
         super(props);
+
+        // this.imageHeight = new Animated.Value(100);
+        // this.imageWidth = new Animated.Value(117);
     }
 
     state = {
         email: '',
-        password: ''
+        password: '',
+        rememberMe: false
     }
 
     authService = new AuthService(false);
 
     onLoginButtonPressed = () => {
         const params = { ...this.state };
-        
-        if(params.email == '' || params.password == '') {
+
+        if (params.email == '' || params.password == '') {
             alert('Complete los campos');
             return;
         }
-        
+
         this.authService.login(params)
-        .then(user => {
-            this.state.email = '';
-            this.state.password = '';
-            this.props.navigation.navigate('Home', { user: user});
-        })
-        .catch(error => {
-            alert(error);
-            console.log(error);
-        });
+            .then(user => {
+                this.state.email = '';
+                this.state.password = '';
+                this.props.navigation.navigate('Home', { user: user });
+            })
+            .catch(error => {
+                alert(error);
+                console.log(error);
+            });
+    };
+
+    onForgotPassword = () => {
+        alert('hola');
     };
 
     render = () => (
-        <View style={styles.screen} onStartShouldSetResponder={() => true} onResponderRelease={() => Keyboard.dismiss()} nativeID="loginContainer">
-            <View style={styles.header} nativeID="loginHeader">
-                <Image resizeMode="contain" style={styles.image} source={require('../../assets/images/logo_login.png')} />
-            </View>
-            <View style={styles.content}>
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding':null} style={{ flex: 1 }}>
+            <ScrollView contentContainerStyle={styles.container} onStartShouldSetResponder={() => true} onResponderRelease={() => Keyboard.dismiss()}>
+                <Image style={styles.image} source={require('../../assets/images/logo_login.png')} />
                 <TextInput
                     label='Email'
                     value={this.state.email}
                     onChangeText={email => this.setState({ email })}
                     style={styles.input}
+                    padding='none'
+                    dense={true}
                     theme={{ dark: true, colors: { primary: '#333366' } }}
                 />
                 <TextInput
@@ -54,44 +63,53 @@ export class LoginScreen extends React.Component {
                     value={this.state.password}
                     onChangeText={password => this.setState({ password })}
                     style={styles.input}
+                    padding='none'
+                    dense={true}
                     theme={{ dark: true, colors: { primary: '#333366' } }}
                 />
-                <Button style={styles.mt15} mode="contained" onPress={this.onLoginButtonPressed} theme={{ dark: true, colors: { primary: '#333366' } }}>
-                    Login
+                <CheckBox
+                    style={styles.checkBox}
+                    onClick={() => { this.setState({ rememberMe: !this.state.rememberMe }) }}
+                    isChecked={this.state.rememberMe}
+                    rightText={"Recordame"}
+                />
+                <Button style={styles.loginBtn} contentStyle={{height: 50}} mode="contained" uppercase={false} color='#333366' onPress={this.onLoginButtonPressed}>
+                    Ingresar
                 </Button>
-            </View>
-        </View>
+
+                <Button style={styles.forgotBtn} mode="text" uppercase={false}  color='#ccc' compact={true} onPress={this.onForgotPassword} >
+                    ¿Olvidaste tu constraseña?
+                </Button>
+            </ScrollView>
+        </KeyboardAvoidingView>
     );
 }
 
 const styles = StyleSheet.create({
-    screen: {
-        flexDirection: 'column',
+    container: {
+        padding: 30,
+        paddingBottom: 50,
+        paddingTop: 50,
+        justifyContent: 'space-evenly',
         flex: 1,
-        justifyContent: 'space-between',
-        padding: 20
-    },
-    header: {
-        flex: 1,
-        flexDirection: 'column',
-        padding: 50
     },
     image: {
-        flex: 1,
-        alignSelf: 'stretch',
-        height: undefined,
-        width: undefined
+        height: 140,
+        width: 164,
+        alignSelf: 'center'
     },
     input: {
-        marginBottom: 10
+        marginBottom: 20,
     },
-    content: {
-        justifyContent: 'space-between',
-        flex: 1,
+    checkBox: {
+        marginBottom: 20,
     },
-    mt15:{
-        marginTop: 15,
-        borderRadius: 20,
-        borderWidth: 1,
+    loginBtn: {
+        marginBottom: 20,
+        borderRadius: 30,
+        textTransform: 'capitalize'
     },
+    forgotBtn: {
+
+    }
 });

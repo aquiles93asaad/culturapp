@@ -1,82 +1,121 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, KeyboardAvoidingView, ScrollView, Platform, Keyboard } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 
 export class ProfileScreen extends React.Component {
 
+    constructor(props) {
+        super(props);
+    }
+
+    user = this.props.navigation.getParam('user')
+
     state = {
-        user: this.props.navigation.getParam('user'),
+        email: this.user.email,
+        name: this.user.name,
+        lastName: this.user.lastName,
+        phone: this.user.phone,
         password: '',
         repeatPassword: ''
     }
 
+    onUpdateProfile = () => {
+        const params = { ...this.state };
+
+        if(params.phone != this.user.phone || params.password != '' || params.repeatPassword != '') {
+            if(params.password != params.repeatPassword) {
+                alert('Las contraseñas no coinciden');
+                return;
+            }
+
+            alert('actualizar');
+        }
+    }
+
     render() {
         return (
-            <View style={styles.content} onStartShouldSetResponder={() => true} onResponderRelease={() => Keyboard.dismiss()}>
-                <TextInput
-                    label='Email'
-                    value={this.state.user.email}
-                    onChangeText={email => this.setState({ email })}
-                    style={styles.input}
-                    theme={{ dark: true, colors: { primary: '#333366' } }}
-                />
-                <TextInput
-                    label='Nombre'
-                    value={this.state.user.name}
-                    onChangeText={password => this.setState({ password })}
-                    style={styles.input}
-                    theme={{ dark: true, colors: { primary: '#333366' } }}
-                />
-                <TextInput
-                    label='Apellido'
-                    value={this.state.user.lastName}
-                    onChangeText={email => this.setState({ email })}
-                    style={styles.input}
-                    theme={{ dark: true, colors: { primary: '#333366' } }}
-                />
-                <TextInput
-                    label='Teléfono/Celular'
-                    value={this.state.user.phone}
-                    onChangeText={email => this.setState({ email })}
-                    style={styles.input}
-                    theme={{ dark: true, colors: { primary: '#333366' } }}
-                />
-                <TextInput
-                    label='Nueva contraseña'
-                    secureTextEntry={true}
-                    value={this.state.password}
-                    onChangeText={email => this.setState({ email })}
-                    style={styles.input}
-                    theme={{ dark: true, colors: { primary: '#333366' } }}
-                />
-                <TextInput
-                    label='Confrimar nueva contraseña'
-                    secureTextEntry={true}
-                    value={this.state.repeatPassword}
-                    onChangeText={email => this.setState({ email })}
-                    style={styles.input}
-                    theme={{ dark: true, colors: { primary: '#333366' } }}
-                />
-                <Button style={styles.mt15} mode="contained" onPress={this.onLoginButtonPressed} theme={{ dark: true, colors: { primary: '#333366' } }}>
-                    Actualizar
-                </Button>
-            </View>
+            <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding':null} style={{ flex: 1 }}>
+                <ScrollView contentContainerStyle={styles.container} onStartShouldSetResponder={() => true} onResponderRelease={() => Keyboard.dismiss()}>
+                    <TextInput
+                        label='Teléfono/Celular'
+                        value={this.state.phone}
+                        onChangeText={(phone) => this.setState({ phone: phone })}
+                        style={styles.input}
+                        padding='none'
+                        dense={true}
+                        theme={{ dark: true, colors: { primary: '#333366' } }}
+                    />
+                    <TextInput
+                        label='Nueva contraseña'
+                        secureTextEntry={true}
+                        value={this.state.password}
+                        onChangeText={(password) => this.setState({ password: password })}
+                        style={styles.input}
+                        padding='none'
+                        dense={true}
+                        theme={{ dark: true, colors: { primary: '#333366' } }}
+                    />
+                    <TextInput
+                        label='Confrimar nueva contraseña'
+                        secureTextEntry={true}
+                        value={this.state.repeatPassword}
+                        onChangeText={(repeatPassword) => this.setState({ repeatPassword: repeatPassword })}
+                        style={styles.input}
+                        padding='none'
+                        dense={true}
+                        theme={{ dark: true, colors: { primary: '#333366' } }}
+                    />
+                    <TextInput
+                        label='Email'
+                        value={this.state.email}
+                        onChangeText={(email) => this.setState({ email: email })}
+                        style={styles.input}
+                        padding='none'
+                        dense={true}
+                        disabled={true}
+                        theme={{ dark: true, colors: { primary: '#333366' } }}
+                    />
+                    <TextInput
+                        label='Nombre'
+                        value={this.state.name}
+                        onChangeText={(name) => this.setState({ name: name })}
+                        style={styles.input}
+                        padding='none'
+                        dense={true}
+                        disabled={true}
+                        theme={{ dark: true, colors: { primary: '#333366' } }}
+                    />
+                    <TextInput
+                        label='Apellido'
+                        value={this.state.lastName}
+                        onChangeText={(lastName) => this.setState({ lastName: lastName })}
+                        style={styles.input}
+                        padding='none'
+                        dense={true}
+                        disabled={true}
+                        theme={{ dark: true, colors: { primary: '#333366' } }}
+                    />
+                    <Button style={styles.formBtn} contentStyle={{height: 50}} mode="contained" uppercase={false} color='#333366' onPress={this.onUpdateProfile}>
+                        Actualizar
+                    </Button>
+                </ScrollView>
+            </KeyboardAvoidingView>
         );
     }
 }
 
 const styles = StyleSheet.create({
+    container: {
+        padding: 30,
+        paddingTop: 15,
+        justifyContent: 'space-between',
+        flex: 1,
+    },
     input: {
         marginBottom: 10
     },
-    content: {
-        justifyContent: 'space-between',
-        flex: 1,
-        padding: 30
-    },
-    mt15:{
-        marginTop: 15,
-        borderRadius: 20,
-        borderWidth: 1,
+    formBtn:{
+        borderRadius: 30,
+        textTransform: 'capitalize'
     },
 });
