@@ -44,6 +44,7 @@ export class OpportunityListScreen extends React.Component {
 		await this.createServiceInstance();
 		await this.getOpportunities();
 		await this.getCompanies();
+		await this.getUsers();
     }
 
 	createServiceInstance = async() => {
@@ -71,11 +72,11 @@ export class OpportunityListScreen extends React.Component {
 		let filters = null;
 		if (this.state.user.roles.includes('SUPERVISOR')) {
 			filters = {
-				supervisor: user._id
+				supervisor: this.state.user._id
 			}
-		} else if (user.roles.includes('LIDER')) {
+		} else if (this.state.user.roles.includes('LIDER')) {
 			filters = {
-				userCompany: user.userCompany._id
+				userCompany: this.state.user.userCompany._id
 			}
 		}
 		
@@ -323,20 +324,22 @@ export class OpportunityListScreen extends React.Component {
 		if (this.state.chosenOpportunity.companyClient._id != this.state.clients[index]._id){
 			this.setState({ chosenOpportunity: { ...this.state.chosenOpportunity, companyClient:  { ...this.state.chosenOpportunity.companyClient, _id: this.state.clients[index]._id}} });
 		}
+	}
+
+	onChangeUser = (args, index, data) => {
+		console.log(index);
+		if (this.state.chosenOpportunity.companyClient._id != this.state.usersCompany[index]._id){ // ARREGLAR ESTO
+			this.setState({ chosenOpportunity: { ...this.state.chosenOpportunity, assignedTo: this.state.usersCompany[index]._id} });
+		}
     }
 	
 	showAsing = () => {
 		// let data = [];
-		// for (let i = 0; i < this.state.data.userCompany.users.length; i++) {
-		// 	data.push( {"value" : this.state.clients[i].name, "id" :  this.state.clients[i]._id })
+		// for (let i = 0; i < this.state.data.userCompany.length; i++) {
+		// 	data.push( {"value" : this.state.userCompany[i].name, "id" :  this.state.userCompany[i]._id })
 		// }
-		let data = [{
-			value: 'Banana',
-		  }, {
-			value: 'Mango',
-		  }, {
-			value: 'Pear',
-		  }];
+		let data = [];
+		console.log(this.state.chosenOpportunity);
 		return ( 
 			<View>
 				<Text style={styles.title}>Asignar oportunidad a</Text>
@@ -344,7 +347,8 @@ export class OpportunityListScreen extends React.Component {
 					label='Participantes'
 					data={data}
 					containerStyle={styles.picker}
-					// onChangeText={this.onChangeCompany}
+					value={this.state.chosenOpportunity.name}
+					onChangeText={this.onChangeUser}
 				/>
 				<Button 
 				style={styles.mt15} 
