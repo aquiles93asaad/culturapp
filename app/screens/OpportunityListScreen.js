@@ -91,7 +91,6 @@ export class OpportunityListScreen extends React.Component {
 	};
 
 	getOpportunities = async() => {
-		console.log(this.state.user);
 		await this.opportunityService.get({}, true)
 		.then(opportunities => {
 			this.setState({ allOpportunities: [...opportunities ] });
@@ -124,17 +123,21 @@ export class OpportunityListScreen extends React.Component {
 			console.log(error);
 		});
 		this._hideModalEdit();
+		this._hideModalAsing();
 		this.getOpportunities();
 		this.setState(state => ({ visible: !state.visible }));
 	}
 	
 	_showModalAsing = () => this.setState({ showModalAsing: true });
-  	_hideModalAsing = () => this.setState({ showModalAsing: false });
+	_hideModalAsing = () => {
+		this.setState({ showModalAsing: false });
+		this.setState({ showFooter: false });
+	}
 	_showModalEdit = () => this.setState({ showModalEdit: true });
   	_hideModalEdit = () => {
 		  this.setState({ showModalEdit: false });
 		  this.setState({ showFooter: false });
-		}
+	}
     
     renderStateIcon = (state) => {
         switch (state) {
@@ -160,11 +163,11 @@ export class OpportunityListScreen extends React.Component {
 						style={data.itemList}
 						description={data.companyClient.name + '   ' + date}
 						onPress={() => this.chooseOpportunity(data)}
-                        left={() => <Image style={{width:24, height:24}} source={this.renderStateIcon(data.state)}/>}>
-                        <List.Item style={{backgroundColor:'#f7f7f7'}} title="Creación" description={date} />
-                        <List.Item style={{backgroundColor:'#f7f7f7'}} title="Cliente" description={data.companyClient.name}/>
-                        <List.Item style={{backgroundColor:'#f7f7f7'}} title="Creado por" description={data.createdBy.name + ' ' + data.createdBy.lastName}/>
-                        <List.Item style={{backgroundColor:'#f7f7f7'}} title="Canal de venta" description={data.createdBy.userCompany.name}/>
+                        left={() => <Image style={styles.imageListOpp} source={this.renderStateIcon(data.state)}/>}>
+                        <List.Item style={styles.backgroundListItem} title="Creación" description={date} />
+                        <List.Item style={styles.backgroundListItem} title="Cliente" description={data.companyClient.name}/>
+                        <List.Item style={styles.backgroundListItem} title="Creado por" description={data.createdBy.name + ' ' + data.createdBy.lastName}/>
+                        <List.Item style={styles.backgroundListItem} title="Canal de venta" description={data.createdBy.userCompany.name}/>
                     </List.Accordion>
                 )
             })
@@ -194,13 +197,13 @@ export class OpportunityListScreen extends React.Component {
 	demoButton(){
 		if(this.state.chosenOpportunity.state == 'active'){
 			return (
-				<View style={{marginRight:15}}>
+				<View style={styles.viewButtons}>
 					<TouchableOpacity 
 						activeOpacity={0.5}
 						>
 						<Image
 						source={require('../../assets/images/opportunity-demo.png')}
-						style={{width:35, height:35}}
+						style={styles.buttonFooter}
 						/>
 					</TouchableOpacity>
 				</View>
@@ -211,11 +214,11 @@ export class OpportunityListScreen extends React.Component {
 	editButton(){
 		if(this.state.chosenOpportunity.state == 'active'){
 			return (
-				<View style={{marginRight:15}}>
+				<View style={styles.viewButtons}>
 					<TouchableOpacity activeOpacity={0.5} onPress={() => this._showModalEdit()}>
 						<Image
 						source={require('../../assets/images/opportunity-edit.png')}
-						style={{width:35, height:35}}
+						style={styles.buttonFooter}
 						/>
 					</TouchableOpacity>
 				</View>
@@ -224,15 +227,14 @@ export class OpportunityListScreen extends React.Component {
 	}
 
 	asingUserButton(){
-		console.log(this.state.chosenOpportunity);
 		if(this.state.chosenOpportunity.state == 'active' && (this.state.user.roles.includes('LIDER') || this.state.user.roles.includes('SUPERVISOR'))){
 		// if(this.state.chosenOpportunity.state == 'active'){
 			return (
-				<View style={{marginRight:15}}>
+				<View style={styles.viewButtons}>
 					<TouchableOpacity activeOpacity={0.5} onPress={() => this._showModalAsing()}>
 						<Image
 						source={require('../../assets/images/opportunity-asing-user.png')}
-						style={{width:35, height:35}}
+						style={styles.buttonFooter}
 						/>
 					</TouchableOpacity>
 				</View>
@@ -244,11 +246,11 @@ export class OpportunityListScreen extends React.Component {
 		const active = 'active';
 		if(this.state.chosenOpportunity.state == 'lost' || this.state.chosenOpportunity.state == 'dismissed' ){
 			return (
-				<View style={{marginRight:15}}>
+				<View style={styles.viewButtons}>
 					<TouchableOpacity activeOpacity={0.5} onPress={() => this.updateOpportunities(this.state.chosenOpportunity._id, active)}>
 						<Image
 						source={require('../../assets/images/opportunity-refresh.png')}
-						style={{width:35, height:35}}
+						style={styles.buttonFooter}
 						/>
 					</TouchableOpacity>
 				</View>
@@ -260,11 +262,11 @@ export class OpportunityListScreen extends React.Component {
 		const won = 'won';
 		if(this.state.chosenOpportunity.state == 'active' && this.state.chosenOpportunity.opportunityProposals[0]){
 			return (
-				<View style={{marginRight:15}}>
+				<View style={styles.viewButtons}>
 					<TouchableOpacity activeOpacity={0.5} onPress={() => this.updateOpportunities(this.state.chosenOpportunity._id, won)}>
 						<Image
 						source={require('../../assets/images/opportunity_won.png')}
-						style={{width:35, height:35}}
+						style={styles.buttonFooter}
 						/>
 					</TouchableOpacity>
 				</View>
@@ -276,11 +278,11 @@ export class OpportunityListScreen extends React.Component {
 		const lost = 'lost';
 		if(this.state.chosenOpportunity.state == 'active'){
 			return (
-				<View style={{marginRight:15}}>
+				<View style={styles.viewButtons}>
 					<TouchableOpacity activeOpacity={0.5} onPress={() => this.updateOpportunities(this.state.chosenOpportunity._id, lost)}>
 						<Image
 						source={require('../../assets/images/opportunity_lost.png')}
-						style={{width:35, height:35}}
+						style={styles.buttonFooter}
 						/>
 					</TouchableOpacity>
 				</View>
@@ -296,7 +298,7 @@ export class OpportunityListScreen extends React.Component {
 					<TouchableOpacity activeOpacity={0.5} onPress={() => this.updateOpportunities(this.state.chosenOpportunity._id, dismissed)}>
 						<Image
 						source={require('../../assets/images/opportunity_dismissed.png')}
-						style={{width:35, height:35}}
+						style={styles.buttonFooter}
 						/>
 					</TouchableOpacity>
 				</View>
@@ -327,19 +329,23 @@ export class OpportunityListScreen extends React.Component {
 	}
 
 	onChangeUser = (args, index, data) => {
-		console.log(index);
-		if (this.state.chosenOpportunity.companyClient._id != this.state.usersCompany[index]._id){ // ARREGLAR ESTO
-			this.setState({ chosenOpportunity: { ...this.state.chosenOpportunity, assignedTo: this.state.usersCompany[index]._id} });
-		}
+		this.setState({ chosenOpportunity: { ...this.state.chosenOpportunity, assignedTo: { ...this.state.chosenOpportunity.assignedTo, _id: this.state.usersCompany[index]._id} }});
     }
 	
 	showAsing = () => {
-		// let data = [];
-		// for (let i = 0; i < this.state.data.userCompany.length; i++) {
-		// 	data.push( {"value" : this.state.userCompany[i].name, "id" :  this.state.userCompany[i]._id })
-		// }
+		let defaultData = null;
 		let data = [];
-		console.log(this.state.chosenOpportunity);
+
+		for (let i = 0; i < this.state.usersCompany.length; i++) {
+			data.push( {"value" : this.state.usersCompany[i].name+' '+this.state.usersCompany[i].lastName, "id" :  this.state.usersCompany[i]._id })
+		}
+
+		if (this.state.chosenOpportunity.assignedTo) {
+			defaultData = this.state.chosenOpportunity.assignedTo.name+' '+this.state.chosenOpportunity.assignedTo.lastName;
+		} else {
+			defaultData = '';
+		}
+
 		return ( 
 			<View>
 				<Text style={styles.title}>Asignar oportunidad a</Text>
@@ -347,16 +353,22 @@ export class OpportunityListScreen extends React.Component {
 					label='Participantes'
 					data={data}
 					containerStyle={styles.picker}
-					value={this.state.chosenOpportunity.name}
+					value={defaultData}
 					onChangeText={this.onChangeUser}
 				/>
 				<Button 
 				style={styles.mt15} 
 				mode="contained" 
-				// onPress={}
+				onPress={() => this.editOpportunity(this.state.chosenOpportunity)}
 				theme={{ dark: true, colors: { primary: '#333366' } }}>
 					Confirmar
 				</Button>
+				<TouchableOpacity 
+					activeOpacity={0.5}
+					onPress={this._hideModalAsing}
+				>
+					<Text style={styles.cancelButton}>Cancelar</Text>
+				</TouchableOpacity>
 			</View>
 		)
 	}
@@ -380,14 +392,14 @@ export class OpportunityListScreen extends React.Component {
 					<TextInput
 						label='Nombre de la oportunidad'
 						value={this.state.chosenOpportunity.name}
-						style={{backgroundColor:'white', height: 50, width: 250}}
+						style={styles.inputEdit}
 						onChangeText={(newName) => this.setState({ chosenOpportunity: { ...this.state.chosenOpportunity, name: newName} })}
 					/>
 					<TextInput
 						label='Descripción'
 						multiline={true}
 						numberOfLines={4}
-						style={{backgroundColor:'white', height: 50, width: 250}}
+						style={styles.inputEdit}
 						onChangeText={(newDescription) => this.setState({ chosenOpportunity: { ...this.state.chosenOpportunity, description: newDescription} })}
 						value={this.state.chosenOpportunity.description}/>
 					<CheckBox
@@ -441,7 +453,6 @@ export class OpportunityListScreen extends React.Component {
 	}
 	
 	render() {
-		const asignUser = this.state.showModalAsing;
 		return (
 			<View>
 				<ScrollView  
@@ -464,10 +475,10 @@ export class OpportunityListScreen extends React.Component {
 				>
 					Se actualizo la oportunidad
 				</Snackbar>
-				<Modal visible={asignUser} onDismiss={this._hideModalAsing} contentContainerStyle={{height: 300, backgroundColor:'white', justifyContent: 'center', alignItems: 'center'}}>
+				<Modal visible={this.state.showModalAsing} contentContainerStyle={styles.modalAsign}>
 					{this.showAsing()}
 				</Modal>
-				<Modal visible={this.state.showModalEdit} contentContainerStyle={{height: 450, backgroundColor:'white', justifyContent: 'center', alignItems: 'center'}}>
+				<Modal visible={this.state.showModalEdit} contentContainerStyle={styles.modalEdit}>
 					{this.showEdit()}
 				</Modal>
 			</View>
@@ -502,7 +513,7 @@ const styles = StyleSheet.create({
 		shadowRadius: 2,
 		shadowOffset: {
 			height: 1,
-			width: 1
+			width: 1,
 		}
 	},
 	bottomView:{
@@ -513,7 +524,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center', 
 		alignItems: 'center',
 		position: 'absolute',
-		bottom: 0
+		bottom: 0,
 	},
 	picker: {
 		width: 250,
@@ -528,9 +539,40 @@ const styles = StyleSheet.create({
         marginTop: 15,
 	},
 	cancelButton: {
-		marginTop: 15,
+		marginTop: 20,
 		fontSize: 15,
 		textAlign: 'center',
 		color: 'grey',
+	},
+	modalAsign: {
+		height: 300,
+		backgroundColor:'white',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	modalEdit: {
+		height: 450,
+		backgroundColor:'white',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	inputEdit:{
+		backgroundColor:'white',
+		height: 50,
+		width: 250,
+	},
+	buttonFooter:{
+		height: 35,
+		width: 35,
+	},
+	viewButtons:{
+		marginRight:15
+	},
+	imageListOpp:{
+		width:24,
+		height:24,
+	},
+	backgroundListItem:{
+		backgroundColor:'#f7f7f7'
 	},
 });
