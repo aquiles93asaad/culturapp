@@ -2,7 +2,9 @@ import React from 'react';
 import { View, StyleSheet, Text} from 'react-native';
 import Echarts from 'native-echarts';
 import DatePicker from 'react-native-datepicker';
+import { Button } from 'react-native-paper';
 import CalendarPicker from 'react-native-calendar-picker';
+import { OpportunityService } from '../services'
 
 export class ReportScreen extends React.Component {
 	// static navigationOptions = {
@@ -10,10 +12,10 @@ export class ReportScreen extends React.Component {
 	// };
 
 	state = {
-		wonPie: 1,
-		lostPie: 2,
-		dismissedPie: 3,
-		activePie: 4,
+		wonPie: 0,
+		lostPie: 1,
+		dismissedPie: 2,
+		activePie: 0,
 		wonBar: 1,
 		lostBar: 2,
 		dismissedBar: 3,
@@ -21,45 +23,20 @@ export class ReportScreen extends React.Component {
 		dateBar: '',
 		selectedStartDate: null,
       	selectedEndDate: null,
-		
+		allOpportunities: [],
 	}
 
-	onDateChange(date, type) {
-		if (type === 'END_DATE') {
-		  this.setState({
-			selectedEndDate: date,
-		  });
-		} else {
-		  this.setState({
-			selectedStartDate: date,
-			selectedEndDate: null,
-		  });
-		}
-	  }
+	opportunityService = null;
 
-	render() {
-		const pie = {
-			title: {
-				text: 'Cantidad de oportunidades',
-				left: 'center',
-			},
-			tooltip: {
-				trigger: 'item',
-				formatter: '{a} <br/>{b} : {c} ({d}%)'
-			},
-			series: [{
-				name: 'Oportunidades',
-				type: 'pie',
-				radius: '55%',
-				center: ['50%', '50%'],
-				data: [
-					{ value: this.state.wonPie, name: 'Ganadas' },
-					{ value: this.state.lostPie, name: 'Perdidas' },
-					{ value: this.state.dismissedPie, name: 'Desechadas' },
-					{ value: this.state.activePie, name: 'En progreso' }
-				]
-			}]
-		};
+	componentWillMount = async() => {
+		await this.createServiceInstance();
+    }
+
+	createServiceInstance = async() => {
+        this.opportunityService = new OpportunityService(true);
+	}
+
+	renderBar = () => { 
 		const bar = {
 			title: {
                 text: 'Precio total oportunidades',
@@ -111,6 +88,73 @@ export class ReportScreen extends React.Component {
 				]
             }]
 		};
+	}
+
+	renderPie = () => {
+		const pie = {
+			title: {
+				text: 'Cantidad de oportunidades',
+				left: 'center',
+			},
+			tooltip: {
+				trigger: 'item',
+				formatter: '{a} <br/>{b} : {c} ({d}%)'
+			},
+			series: [{
+				name: 'Oportunidades',
+				type: 'pie',
+				radius: '55%',
+				center: ['50%', '50%'],
+				data: [
+					{ value: this.state.wonPie, name: 'Ganadas' },
+					{ value: this.state.lostPie, name: 'Perdidas' },
+					{ value: this.state.dismissedPie, name: 'Desechadas' },
+					{ value: this.state.activePie, name: 'En progreso' }
+				]
+			}]
+		};
+
+		if (this.state.activePie == 0 && this.state.dismissedPie == 0 && this.state.lostPie == 0 && this.state.wonPie == 0){
+		} else {
+			return (
+				<Echarts option={pie} height={300} />
+			)
+		}
+	}
+
+	getOpportunities = async() => {
+		console.log(new Date());
+		const filters = { createdAt: {} };
+		if(this.state.selectedStartDate) {
+			filters.createdAt['$gte'] = new Date(this.state.selectedStartDate)
+		}
+		if(this.state.selectedEndDate) {
+			filters.createdAt['$lte'] = new Date(this.state.selectedEndDate)
+		}
+
+		console.log(filters);
+
+		await this.opportunityService.get(filters, false)
+		.then(opportunities => {
+			this.setState({ allOpportunities: [...opportunities ] });
+			console.log(this.state.allOpportunities);
+			// console.log(typeof filters.createdAt);
+            return opportunities;
+        })
+        .catch(error => {
+            console.log(error);
+		});
+		
+		console.log(this.state.allOpportunities);
+	}
+
+	onDateChange(date) {
+		  this.setState({
+			selectedStartDate: new Date (date),
+		  });
+	  }
+
+	render() {
 		const { selectedStartDate, selectedEndDate } = this.state;
 		const minDate = new Date(); // Today
 		const maxDate = new Date(2017, 6, 3);
@@ -130,32 +174,67 @@ export class ReportScreen extends React.Component {
 				/>
 				<Text>SELECTED START DATE:{ startDate }</Text>
 				<Text>SELECTED END DATE:{ endDate }</Text> */}
-				<DatePicker
-					style={{width: 200}}
-					date={this.state.date}
-					mode="date"
-					placeholder="seleccionar día"
-					format="YYYY-MM-DD"
-					minDate="2019-01-01"
-					maxDate={new Date()}
-					confirmBtnText="Confirmar"
-					cancelBtnText="Cancelar"
-					customStyles={{
-					dateIcon: {
-						position: 'absolute',
-						left: 0,
-						top: 4,
-						marginLeft: 0
-					},
-					dateInput: {
-						marginLeft: 36
-					}
-					// ... You can check the source to find the other keys.
-					}}
-					onDateChange={(date) => {this.setState({date: date})}}
-				/>
-				<Echarts option={pie} height={300} />
-				<Echarts option={bar} height={300} />
+				<View
+				style={{alignItems: 'center'}}
+				>
+					<DatePicker
+						style={{marginTop: 5, width: 300}}
+						date=''
+						mode="date"
+						placeholder="seleccionar día"
+						// format="DD-MM-YYYY"
+						minDate="2019-01-01"
+						maxDate={new Date()}
+						confirmBtnText="Confirmar"
+						cancelBtnText="Cancelar"
+						customStyles={{
+						dateIcon: {
+							position: 'absolute',
+							left: 0,
+							top: 4,
+							marginLeft: 0
+						},
+						dateInput: {
+							marginLeft: 36
+						}
+						// ... You can check the source to find the other keys.
+						}}
+						onDateChange={(date) => this.onDateChange(date)}
+					/>
+					<DatePicker
+						style={{marginTop: 15, marginBottom: 10, width: 300}}
+						date={this.state.date}
+						mode="date"
+						placeholder="seleccionar día"
+						format="DD-MM-YYYY"
+						minDate="2019-01-01"
+						maxDate={new Date()}
+						confirmBtnText="Confirmar"
+						cancelBtnText="Cancelar"
+						customStyles={{
+						dateIcon: {
+							position: 'absolute',
+							left: 0,
+							top: 4,
+							marginLeft: 0
+						},
+						dateInput: {
+							marginLeft: 36
+						}
+						// ... You can check the source to find the other keys.
+						}}
+						onDateChange={(date) => {this.setState({date: date})}}
+					/>
+				</View>
+				{this.renderPie()}
+				<Button 
+				style={styles.mt15} 
+				mode="contained" 
+				onPress={ () => this.getOpportunities() }
+				theme={{ dark: true, colors: { primary: '#333366' } }}>
+					Confirmar
+				</Button>
+				{/* <Echarts option={bar} height={300} /> */}
 			</View>
 		);
 	}
@@ -191,5 +270,10 @@ const styles = StyleSheet.create({
 	steps: {
 		marginTop: 15,
 		marginBottom: 15,
-	}
+	},
+	mt15:{
+		marginTop: 15,
+        borderRadius: 20,
+        borderWidth: 1,
+	},
 });
