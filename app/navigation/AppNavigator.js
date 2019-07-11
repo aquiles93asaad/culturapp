@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, TouchableOpacity } from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
-import { HomeScreen, SettingsScreen, ProfileScreen,  SplashScreen, LoginScreen, ReportScreen, OpportunityListScreen, SaleOpportunityScreen , SaleOpportunityScreen2, SaleOpportunityScreen3 } from '../screens/index';
+import { HomeScreen, SettingsScreen, ProfileScreen,  SplashScreen, LoginScreen, ReportScreen, OpportunityListScreen, SaleOpportunityScreen , SaleOpportunityScreen2, SaleOpportunityScreen3, NewClientScreen } from '../screens/index';
 import { AuthService } from '../services';
 
 const authService = new AuthService(false);
@@ -13,6 +13,7 @@ const AppStack = createStackNavigator(
         Home: HomeScreen,
         Profile: ProfileScreen,
         SaleOpportunity: SaleOpportunityScreen,
+        NewClient: NewClientScreen,
         Settings: SettingsScreen,
         Reports: ReportScreen,
         OpportunityList: OpportunityListScreen,

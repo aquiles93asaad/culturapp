@@ -6,5 +6,6 @@ export * from './SettingsScreen';
 export * from './SplashScreen';
 export * from './ReportScreen';
 export * from './OpportunityListScreen';
+export * from './NewClientScreen';
 export * from './SaleOpportunityScreen2';
 export * from './SaleOpportunityScreen3';

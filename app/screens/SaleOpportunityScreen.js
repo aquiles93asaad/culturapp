@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-	View,
-	StyleSheet,
-    Text,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView
-} from 'react-native';
+import { View, StyleSheet, Text, ScrollView } from 'react-native';
 import { Dropdown } from 'react-native-material-dropdown';
 import { Button, IconButton } from 'react-native-paper';
 import { CompanyService } from '../services';
@@ -67,9 +60,12 @@ export class SaleOpportunityScreen extends React.Component {
 		this.props.navigation.navigate('SaleOpportunity2', {data: this.state.selectedClientId});
     };
 
+    goNewClient = () => {
+		this.props.navigation.navigate('NewClient');
+    };
+
 	render() {
 		return (
-            // <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding':null} style={{ flex: 1 }}>
 			<View style={styles.container}>
                 <ScrollView contentContainerStyle={styles.contentContainer}>
                     <ScrollView contentContainerStyle={styles.clientContainer}>
@@ -83,7 +79,7 @@ export class SaleOpportunityScreen extends React.Component {
                                 icon="add"
                                 color='#fff'
                                 size={30}
-                                onPress={() => alert('Pressed')}
+                                onPress={this.goNewClient}
                             />
                             <Text style={styles.newClientText}>Nuevo cliente</Text>
                         </ScrollView>
@@ -100,7 +96,6 @@ export class SaleOpportunityScreen extends React.Component {
                     </ScrollView>
                 </ScrollView>
 			</View>
-            // </KeyboardAvoidingView>
 		);
 	}
 }
