@@ -6,6 +6,7 @@ import {
 	Text,
 	ScrollView,
 	TouchableOpacity,
+	ActivityIndicator,
 } from 'react-native';
 import { List, Button, Snackbar, Modal, TextInput } from 'react-native-paper';
 import CheckBox from 'react-native-check-box'
@@ -36,6 +37,12 @@ export class OpportunityListScreen extends React.Component {
 		showModalEdit: false,
 		nameOpportunity: '',
 		descOpportunity: '',
+		visibleLoader: true,
+		padding: {
+			padding: 15,
+			marginBottom:0,
+		},
+		keyPerList:[]
 	}
 
 	opportunityService = null;
@@ -98,7 +105,9 @@ export class OpportunityListScreen extends React.Component {
         })
         .catch(error => {
             console.log(error);
-        });
+        }).finally(() => {
+			this.setState({visibleLoader: false});
+		});
 	}
 	
 	updateOpportunities(id, state)  {
@@ -112,6 +121,7 @@ export class OpportunityListScreen extends React.Component {
 		this.getOpportunities();
 		this.setState(state => ({ visible: !state.visible }));
 		this.setState({showFooter: false});
+		this.setState({padding: {marginBottom : 0,  padding: 15}});
 	}
 
 	editOpportunity(opportunity)  {
@@ -132,11 +142,13 @@ export class OpportunityListScreen extends React.Component {
 	_hideModalAsing = () => {
 		this.setState({ showModalAsing: false });
 		this.setState({ showFooter: false });
+		this.setState({padding: {marginBottom : 0, padding: 15}});
 	}
 	_showModalEdit = () => this.setState({ showModalEdit: true });
-  	_hideModalEdit = () => {
-		  this.setState({ showModalEdit: false });
-		  this.setState({ showFooter: false });
+	_hideModalEdit = () => {
+		this.setState({ showModalEdit: false });
+		this.setState({ showFooter: false });
+		this.setState({ padding: {marginBottom : 0, padding: 15} });
 	}
     
     renderStateIcon = (state) => {
@@ -153,14 +165,16 @@ export class OpportunityListScreen extends React.Component {
     }
 	
 	showList() {
+		// var index = 0;
         return (
             this.state.allOpportunities.map((data) => {
 				var date = moment(data.createdAt).format("DD/MM/YYYY");
+				// this.state.keyPerList.push({"id" : data._id, "expanded": false});
                 return (
                     <List.Accordion
                         key={data._id}
-                        title={data.name}
-						style={data.itemList}
+						title={data.name}
+						style={styles.itemList}
 						description={data.companyClient.name + '   ' + date}
 						onPress={() => this.chooseOpportunity(data)}
                         left={() => <Image style={styles.imageListOpp} source={this.renderStateIcon(data.state)}/>}>
@@ -170,13 +184,26 @@ export class OpportunityListScreen extends React.Component {
                         <List.Item style={styles.backgroundListItem} title="Canal de venta" description={data.createdBy.userCompany.name}/>
                     </List.Accordion>
                 )
-            })
-        )
+			})
+		)
 	}
 	
 	chooseOpportunity(opportunity) {
 		this.setState({chosenOpportunity: opportunity});
 		this.setState({showFooter: true});
+		this.setState({padding: {marginBottom : 50, padding: 15}});
+		if (this.state.chosenOpportunity.state == 'won'){
+			this.setState({padding: {marginBottom : 0, padding: 15}});
+		}
+		// for (let i = 0; i < this.state.keyPerList.length; i++) {
+		// 	this.setState({keyPerList : {expanded: false}})
+		// 	console.log(this.state.keyPerList[i])
+		// }
+		// for (let i = 0; i < this.state.keyPerList.length; i++) {
+
+		// 	if(opportunity._id == this.state.keyPerList[i] )
+			
+		// }
 	}
 
 	showData(checkBoxName){
@@ -455,13 +482,14 @@ export class OpportunityListScreen extends React.Component {
 	render() {
 		return (
 			<View>
-				<ScrollView  
-					style={styles.padding}>
+				{this.state.visibleLoader == true ? <ActivityIndicator style={{marginTop:300}} size="large" color="#0000ff" /> : null}
+				<ScrollView
+					style={this.state.padding}>
 					<List.Section>
 						{this.showList()}
 					</List.Section>
 				</ScrollView>
-				{this.renderFooter()}
+				{this.state.showFooter == true ? this.renderFooter() : null}
 				<Snackbar
 					visible={this.state.visible}
 					duration={14000}

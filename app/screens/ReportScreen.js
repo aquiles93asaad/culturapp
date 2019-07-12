@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text} from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import Echarts from 'native-echarts';
 import DatePicker from 'react-native-datepicker';
 import { Button } from 'react-native-paper';
