@@ -40,6 +40,7 @@ export class OpportunityListScreen extends React.Component {
 		visibleLoader: true,
 		padding: {
 			padding: 15,
+			paddingTop: 0,
 			marginBottom:0,
 		},
 		keyPerList:[]
@@ -101,6 +102,9 @@ export class OpportunityListScreen extends React.Component {
 		await this.opportunityService.get({}, true)
 		.then(opportunities => {
 			this.setState({ allOpportunities: [...opportunities ] });
+			for (let i = 0; i < this.state.allOpportunities.length; i++) {
+				this.state.allOpportunities[i]['expanded'] = false;
+			}
             return opportunities;
         })
         .catch(error => {
@@ -121,7 +125,7 @@ export class OpportunityListScreen extends React.Component {
 		this.getOpportunities();
 		this.setState(state => ({ visible: !state.visible }));
 		this.setState({showFooter: false});
-		this.setState({padding: {marginBottom : 0,  padding: 15}});
+		this.setState({padding: {marginBottom : 0,  padding: 15, paddingTop: 0}});
 	}
 
 	editOpportunity(opportunity)  {
@@ -142,13 +146,13 @@ export class OpportunityListScreen extends React.Component {
 	_hideModalAsing = () => {
 		this.setState({ showModalAsing: false });
 		this.setState({ showFooter: false });
-		this.setState({padding: {marginBottom : 0, padding: 15}});
+		this.setState({padding: {marginBottom : 0, padding: 15, paddingTop: 0}});
 	}
 	_showModalEdit = () => this.setState({ showModalEdit: true });
 	_hideModalEdit = () => {
 		this.setState({ showModalEdit: false });
 		this.setState({ showFooter: false });
-		this.setState({ padding: {marginBottom : 0, padding: 15} });
+		this.setState({ padding: {marginBottom : 0, padding: 15, paddingTop: 0} });
 	}
     
     renderStateIcon = (state) => {
@@ -167,21 +171,21 @@ export class OpportunityListScreen extends React.Component {
 	showList() {
 		// var index = 0;
         return (
-            this.state.allOpportunities.map((data) => {
+            this.state.allOpportunities.map((data, index) => {
 				var date = moment(data.createdAt).format("DD/MM/YYYY");
-				// this.state.keyPerList.push({"id" : data._id, "expanded": false});
                 return (
                     <List.Accordion
                         key={data._id}
 						title={data.name}
 						style={styles.itemList}
+						expanded={this.state.allOpportunities[index].expanded}
 						description={data.companyClient.name + '   ' + date}
 						onPress={() => this.chooseOpportunity(data)}
                         left={() => <Image style={styles.imageListOpp} source={this.renderStateIcon(data.state)}/>}>
-                        <List.Item style={styles.backgroundListItem} title="Creación" description={date} />
-                        <List.Item style={styles.backgroundListItem} title="Cliente" description={data.companyClient.name}/>
-                        <List.Item style={styles.backgroundListItem} title="Creado por" description={data.createdBy.name + ' ' + data.createdBy.lastName}/>
-                        <List.Item style={styles.backgroundListItem} title="Canal de venta" description={data.createdBy.userCompany.name}/>
+                        <List.Item style={styles.backgroundListItem} titleStyle={{fontWeight: 'bold'}} title="Creación" description={date} />
+                        <List.Item style={styles.backgroundListItem} titleStyle={{fontWeight: 'bold'}} title="Cliente" description={data.companyClient.name}/>
+                        <List.Item style={styles.backgroundListItem} titleStyle={{fontWeight: 'bold'}} title="Creado por" description={data.createdBy.name + ' ' + data.createdBy.lastName}/>
+                        <List.Item style={styles.backgroundListItem} titleStyle={{fontWeight: 'bold'}} title="Canal de venta" description={data.createdBy.userCompany.name}/>
                     </List.Accordion>
                 )
 			})
@@ -191,19 +195,21 @@ export class OpportunityListScreen extends React.Component {
 	chooseOpportunity(opportunity) {
 		this.setState({chosenOpportunity: opportunity});
 		this.setState({showFooter: true});
-		this.setState({padding: {marginBottom : 50, padding: 15}});
-		if (this.state.chosenOpportunity.state == 'won'){
-			this.setState({padding: {marginBottom : 0, padding: 15}});
+		if (opportunity.state == 'won'){
+			this.setState({padding: {marginBottom : 0, padding: 15, paddingTop: 0}});
+		} else {
+			this.setState({padding: {marginBottom : 50, padding: 15, paddingTop: 0}});
 		}
-		// for (let i = 0; i < this.state.keyPerList.length; i++) {
-		// 	this.setState({keyPerList : {expanded: false}})
-		// 	console.log(this.state.keyPerList[i])
-		// }
-		// for (let i = 0; i < this.state.keyPerList.length; i++) {
-
-		// 	if(opportunity._id == this.state.keyPerList[i] )
-			
-		// }
+		for (let i = 0; i < this.state.allOpportunities.length; i++) {
+			this.state.allOpportunities[i]['expanded'] = false;
+		}
+		for (let i = 0; i < this.state.allOpportunities.length; i++) {
+			if (this.state.allOpportunities[i]._id == opportunity._id && this.state.allOpportunities[i].expanded == false){
+				this.state.allOpportunities[i]['expanded'] = true;
+			} else if (this.state.allOpportunities[i]._id == opportunity._id && this.state.allOpportunities[i].expanded == true ){
+				this.state.allOpportunities[i]['expanded'] = false;
+			}
+		}
 	}
 
 	showData(checkBoxName){
@@ -482,7 +488,7 @@ export class OpportunityListScreen extends React.Component {
 	render() {
 		return (
 			<View>
-				{this.state.visibleLoader == true ? <ActivityIndicator style={{marginTop:300}} size="large" color="#0000ff" /> : null}
+				{this.state.visibleLoader == true ? <ActivityIndicator style={{marginTop:300}} size="large" color="#333366" /> : null}
 				<ScrollView
 					style={this.state.padding}>
 					<List.Section>
@@ -601,6 +607,6 @@ const styles = StyleSheet.create({
 		height:24,
 	},
 	backgroundListItem:{
-		backgroundColor:'#f7f7f7'
+		backgroundColor:'#f7f7f7',
 	},
 });

@@ -6,7 +6,7 @@ export class IndustryService extends RestClient {
         super(secured);
     }
 
-    getindustries(filters) {
+    getIndustries(filters) {
         return this.instance.post('industry/get', {
             filters
         }).then(result => {

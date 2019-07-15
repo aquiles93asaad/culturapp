@@ -19,4 +19,18 @@ export class CompanyService extends RestClient {
             return Promise.reject(error);
         });
     }
+
+    create(company) {
+        return this.instance.post('company/create', {
+            company
+        }).then(result => {
+            if(typeof result.data.companies !== 'undefined') {
+                return Promise.resolve(result.data.companies);
+            } else {
+                return Promise.reject(result.data);
+            }   
+        }).catch(error => {
+            return Promise.reject(error);
+        });
+    }
 }

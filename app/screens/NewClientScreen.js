@@ -1,7 +1,10 @@
 import React from 'react';
 import { View, StyleSheet, Text, ScrollView } from 'react-native';
-import { TextInput, Button, Snackbar } from 'react-native-paper';
+import { TextInput, Button, Snackbar, RadioButton } from 'react-native-paper';
 import CheckBox from 'react-native-check-box';
+import { Dropdown } from 'react-native-material-dropdown';
+import { CompanyService } from '../services';
+import { IndustryService } from '../services/IndustryService';
 
 
 export class NewClientScreen extends React.Component {
@@ -21,7 +24,82 @@ export class NewClientScreen extends React.Component {
         webSite: '',
         hasStandard: false,
         visible : false,
+        industries: [],
+        checked: ''
     }
+
+    companyService = null;
+
+    componentWillMount = async() => {
+        await this.createCompanyService();
+        await this.getIndustries();
+    }
+
+    createCompanyService = async() => {
+        this.companyService = new CompanyService(true);
+        this.industryService = new IndustryService(true);
+    }
+
+    getIndustries = async() => {
+		const filters = {
+        }
+		
+		await this.industryService.getIndustries(filters)
+		.then(industries => {
+            this.setState({ industries: [...industries ] });
+            return industries;
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    };
+    
+
+	createClient = async() => {
+        let company = {}
+        company['name'] = this.state.name
+        company['cuit'] = this.state.cuit
+        company['country'] = this.state.country
+        company['phone'] = this.state.phone
+        company['employeesCount'] = this.state.employeesCount
+        company['branchesNumber'] = this.state.branchesNumber
+        company['industry'] = this.state.industry
+        company['anualBilling'] = this.state.anualBilling
+        company['type'] = 'medium'
+        company['origin'] = 'national'
+        company['address'] = this.state.address
+        company['webSite'] = this.state.webSite
+        company['hasStandard'] = this.state.hasStandard
+        company['isClient'] = true;
+
+		await this.companyService.create(company)
+		.then(company => {
+            return company;
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    };
+
+    onChangeCompany = (args, index, data) => {
+		this.setState({industry: this.state.industries[index]._id});
+    }
+
+    showList = () => {
+		let data = [];
+		for (let i = 0; i < this.state.industries.length; i++) {
+			data.push( {"value" : this.state.industries[i].name, "id" :  this.state.industries[i]._id })
+        }
+        
+		return ( 
+			<Dropdown
+				label='Nombre de la empresa *'
+				data={data}
+				containerStyle={styles.picker}
+				onChangeText={this.onChangeCompany}
+			/>
+		)
+	}
 
     renderClientForm = () => {
         return (
@@ -64,12 +142,13 @@ export class NewClientScreen extends React.Component {
                     onChangeText={(branchesNumber) => this.setState({ branchesNumber: branchesNumber })}
                     keyboardType='number-pad'
                 />
-                <TextInput
+                {/* {<TextInput
                     label='Industria'
                     value={this.state.industry}
                     style={{backgroundColor:'white'}}
                     onChangeText={(industry) => this.setState({ industry: industry })}
-                />
+                />} */}
+                {this.showList()}
                 <TextInput
                     label='Facturación Anual'
                     value={this.state.anualBilling}
@@ -89,6 +168,23 @@ export class NewClientScreen extends React.Component {
                     style={{backgroundColor:'white'}}
                     onChangeText={(webSite) => this.setState({ webSite: webSite })}
                 />
+                <View>
+                    <RadioButton
+                    value="Pequeña"
+                    status={this.state.checked === 'small' ? 'checked' : 'unchecked'}
+                    onPress={() => { this.setState({ checked: 'small' }); }}
+                    />
+                    <RadioButton
+                    value="Mediana"
+                    status={this.state.checked === 'medium' ? 'checked' : 'unchecked'}
+                    onPress={() => { this.setState({ checked: 'medium' }); }}
+                    />
+                    <RadioButton
+                    value="Grande"
+                    status={this.state.checked === 'big' ? 'checked' : 'unchecked'}
+                    onPress={() => { this.setState({ checked: 'big' }); }}
+                    />
+                </View>
             </React.Fragment>
 		)
     }
@@ -104,7 +200,7 @@ export class NewClientScreen extends React.Component {
                     {this.renderClientForm()}
                     </ScrollView>
                     <ScrollView contentContainerStyle={styles.btnContainer}>
-                        <Button style={styles.nextBtn} contentStyle={{height: 50}} mode="contained" uppercase={false} color='#333366' onPress={this.goStep1}>
+                        <Button style={styles.nextBtn} contentStyle={{height: 50}} mode="contained" uppercase={false} color='#333366' onPress={this.createClient}>
                             Crear
                         </Button>
                     </ScrollView>

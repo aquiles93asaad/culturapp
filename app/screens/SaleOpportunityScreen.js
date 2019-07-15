@@ -1,13 +1,14 @@
 import React from 'react';
 import { View, StyleSheet, Text, ScrollView } from 'react-native';
 import { Dropdown } from 'react-native-material-dropdown';
-import { Button, IconButton } from 'react-native-paper';
+import { Button, IconButton, Snackbar } from 'react-native-paper';
 import { CompanyService } from '../services';
 
 export class SaleOpportunityScreen extends React.Component {
     state = {
 		clients: [],
-		selectedClientId: '',
+        selectedClientId: '',
+        visible : false,
     }
 
     companyService = null;
@@ -25,6 +26,18 @@ export class SaleOpportunityScreen extends React.Component {
 		const filters = {
             isClient: true
         }
+		
+		await this.companyService.getCompanies(filters)
+		.then(companies => {
+			this.setState({ clients: [...companies ] });
+            return companies;
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    };
+
+	create = async() => {
 		
 		await this.companyService.getCompanies(filters)
 		.then(companies => {
@@ -57,7 +70,11 @@ export class SaleOpportunityScreen extends React.Component {
     }
     
 	goStep1 = () => {
-		this.props.navigation.navigate('SaleOpportunity2', {data: this.state.selectedClientId});
+        if (this.state.selectedClientId != ''){
+            this.props.navigation.navigate('SaleOpportunity2', {data: this.state.selectedClientId});
+        } else {
+            this.setState(state => ({ visible: !state.visible }));
+        }
     };
 
     goNewClient = () => {
@@ -95,6 +112,19 @@ export class SaleOpportunityScreen extends React.Component {
                         </Button>
                     </ScrollView>
                 </ScrollView>
+                <Snackbar
+					visible={this.state.visible}
+					duration={20000}
+					onDismiss={() => this.setState({ visible: false })}
+					action={{
+					label: 'OK',
+					onPress: () => {
+						// Do something
+					},
+					}}
+				>
+					Debe ingresar una empresa.
+				</Snackbar>
 			</View>
 		);
 	}
