@@ -8,10 +8,31 @@ export class SaleOpportunityScreen extends React.Component {
     state = {
 		clients: [],
         selectedClientId: '',
+        selectedClientName: '',
+        dataFromNewClients: {name: '', _id: ''},
         visible : false,
     }
 
     companyService = null;
+
+    // componentDidMount(){
+    //     const {navigation} = this.props;
+    //     navigation.addListener ('willFocus', () =>{
+    //         const newCompany = navigation.getParam('newCompany', 'NO-ID');
+    //         this.setState({selectedClientId: newCompany._id});
+    //         console.log(this.state.selectedClientId);
+    //   });
+    // }
+
+    onSelect = data => {
+        // TODO push a clients de { name: data.name, _id: data._id}
+        // this.setState({ clients:  });
+        this.setState({ selectedClientId: data._id });
+        this.setState({ selectedClientName: data.name });
+        // this.setState({dataFromNewClients: {name: data.name, _id: data._id}});
+        this.getCompanies();
+        this.showList();
+    };
 
     componentWillMount = async() => {
         await this.createCompanyService();
@@ -29,7 +50,7 @@ export class SaleOpportunityScreen extends React.Component {
 		
 		await this.companyService.getCompanies(filters)
 		.then(companies => {
-			this.setState({ clients: [...companies ] });
+			this.setState({ clients: [...companies] });
             return companies;
         })
         .catch(error => {
@@ -60,7 +81,9 @@ export class SaleOpportunityScreen extends React.Component {
 				label='Nombre de la empresa *'
 				data={data}
 				containerStyle={styles.picker}
-				onChangeText={this.onChangeCompany}
+                onChangeText={this.onChangeCompany}
+                // value={this.state.dataFromNewClients.name}
+                value={this.state.selectedClientName}
 			/>
 		)
 	}
@@ -72,13 +95,15 @@ export class SaleOpportunityScreen extends React.Component {
 	goStep1 = () => {
         if (this.state.selectedClientId != ''){
             this.props.navigation.navigate('SaleOpportunity2', {data: this.state.selectedClientId});
+        // } else if (this.state.selectedClientId == '' && this.state.dataFromNewClients.name != ''){
+        //     this.props.navigation.navigate('SaleOpportunity2', {data: this.state.dataFromNewClients._id});
         } else {
             this.setState(state => ({ visible: !state.visible }));
         }
     };
 
     goNewClient = () => {
-		this.props.navigation.navigate('NewClient');
+        this.props.navigation.navigate('NewClient', { onSelect: this.onSelect });
     };
 
 	render() {

@@ -30,6 +30,7 @@ export class SaleOpportunityScreen2 extends React.Component {
         const { navigation } = this.props;
         const idCompany = navigation.getParam('data', 'NO-ID');
         this.setState({firstStepData: idCompany})
+        console.log(this.state.firstStepData);
         return this.state.firstStepData;
     }
 

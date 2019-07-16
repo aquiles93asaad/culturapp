@@ -24,8 +24,8 @@ export class CompanyService extends RestClient {
         return this.instance.post('company/create', {
             company
         }).then(result => {
-            if(typeof result.data.companies !== 'undefined') {
-                return Promise.resolve(result.data.companies);
+            if(typeof result.data.company !== 'undefined') {
+                return Promise.resolve(result.data.company);
             } else {
                 return Promise.reject(result.data);
             }   

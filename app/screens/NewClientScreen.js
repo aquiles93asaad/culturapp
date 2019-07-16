@@ -25,7 +25,8 @@ export class NewClientScreen extends React.Component {
         hasStandard: false,
         visible : false,
         industries: [],
-        checked: ''
+        checked: '',
+        clients: []
     }
 
     companyService = null;
@@ -40,6 +41,21 @@ export class NewClientScreen extends React.Component {
         this.industryService = new IndustryService(true);
     }
 
+    getCompanies = async() => {
+		const filters = {
+            isClient: true
+        }
+		
+		await this.companyService.getCompanies(filters)
+		.then(companies => {
+			this.setState({ clients: [...companies] });
+            return companies;
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    };
+
     getIndustries = async() => {
 		const filters = {
         }
@@ -53,32 +69,30 @@ export class NewClientScreen extends React.Component {
             console.log(error);
         });
     };
-    
 
 	createClient = async() => {
-        let company = {}
-        company['name'] = this.state.name
-        company['cuit'] = this.state.cuit
-        company['country'] = this.state.country
-        company['phone'] = this.state.phone
-        company['employeesCount'] = this.state.employeesCount
-        company['branchesNumber'] = this.state.branchesNumber
-        company['industry'] = this.state.industry
-        company['anualBilling'] = this.state.anualBilling
+        let company = {...this.state}
         company['type'] = 'medium'
         company['origin'] = 'national'
-        company['address'] = this.state.address
-        company['webSite'] = this.state.webSite
-        company['hasStandard'] = this.state.hasStandard
         company['isClient'] = true;
 
 		await this.companyService.create(company)
 		.then(company => {
-            return company;
+            const { navigation } = this.props;
+            navigation.goBack();
+            navigation.state.params.onSelect({ name: company.name, _id: company._id});
+            // return company;
         })
         .catch(error => {
             console.log(error);
         });
+
+        // await this.getCompanies();
+        // for (let i = 0; i < this.state.clients.length; i++) {
+        //     if( company.name == this.state.clients[i].name){
+        //         this.setState({ companyComeback: {name: this.state.clients[i].name, _id: this.state.clients[i]._id}});
+        //     }
+        // }
     };
 
     onChangeCompany = (args, index, data) => {
@@ -93,7 +107,7 @@ export class NewClientScreen extends React.Component {
         
 		return ( 
 			<Dropdown
-				label='Nombre de la empresa *'
+				label='Tipo de industria'
 				data={data}
 				containerStyle={styles.picker}
 				onChangeText={this.onChangeCompany}
