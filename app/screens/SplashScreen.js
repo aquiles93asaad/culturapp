@@ -26,16 +26,16 @@ export class SplashScreen extends React.Component {
         await this.authService.me()
         .then(user => {
             userLogged = user;
-            naviageTo = 'Home';
+            naviageTo = 'Drawer';
         }).catch(error => {
             console.log(error);
-            naviageTo = 'Login';
+            naviageTo = 'Auth';
         }).finally(() => {
             // This will switch to the App screen or Auth screen and this loading
             // screen will be unmounted and thrown away.
             this.setState({ progress: 1 });
             StatusBar.setHidden(true, 'none');
-            this.props.navigation.navigate(naviageTo, { user: userLogged});
+            this.props.navigation.navigate(naviageTo, {user: userLogged});
         })
     };
 

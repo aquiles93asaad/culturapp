@@ -132,7 +132,7 @@ export class SaleOpportunityScreen extends React.Component {
                             <ScrollView style={styles.emptyLine} ></ScrollView>
                             <ScrollView style={styles.emptyLine} ></ScrollView>
                         </ScrollView>
-                        <Button style={styles.nextBtn} contentStyle={{height: 50}} mode="contained" uppercase={false} color='#333366' onPress={this.goStep1}>
+                        <Button style={styles.nextBtn} contentStyle={{height: 50}} mode="contained" uppercase={false} color='#3176af' onPress={this.goStep1}>
                             Siguiente
                         </Button>
                     </ScrollView>
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
 	newClientBtn: {
-        backgroundColor: '#333366',
+        backgroundColor: '#3176af',
         borderRadius: 30,
         height: 50,
         width: 50,
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
         height: 6,
         borderRadius: 5,
         maxWidth: 80,
-        backgroundColor: '#333366'
+        backgroundColor: '#3176af'
     },
     emptyLine: {
         height: 6,

@@ -231,7 +231,7 @@ export class ReportScreen extends React.Component {
 				style={styles.mt15} 
 				mode="contained" 
 				onPress={ () => this.getOpportunities() }
-				theme={{ dark: true, colors: { primary: '#333366' } }}>
+				theme={{ dark: true, colors: { primary: '#3176af' } }}>
 					Confirmar
 				</Button>
 				{/* <Echarts option={bar} height={300} /> */}

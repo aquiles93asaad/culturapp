@@ -125,7 +125,7 @@ export class SaleOpportunityScreen2 extends React.Component {
                         isChecked={this.state.automation}
                         rightText={"Automatización de procesos"}
                     />
-                    <Button style={styles.mt15} mode="contained" onPress={this.goStep2} theme={{ dark: true, colors: { primary: '#333366' } }}>
+                    <Button style={styles.mt15} mode="contained" onPress={this.goStep2} theme={{ dark: true, colors: { primary: '#3176af' } }}>
 					    Siguiente
 				    </Button>
                     <Snackbar

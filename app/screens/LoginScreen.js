@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Keyboard, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { Image, Keyboard, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { AuthService } from '../services';
 import CheckBox from 'react-native-check-box'
@@ -32,7 +32,7 @@ export class LoginScreen extends React.Component {
             .then(user => {
                 this.state.email = '';
                 this.state.password = '';
-                this.props.navigation.navigate('Home', { user: user });
+                this.props.navigation.navigate('Drawer', { user: user });
             })
             .catch(error => {
                 alert(error);
@@ -43,6 +43,10 @@ export class LoginScreen extends React.Component {
     onForgotPassword = () => {
         alert('hola');
     };
+
+    goToRegister = () => {
+        this.props.navigation.navigate('Register');
+    }
 
     render = () => (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding':null} style={{ flex: 1 }}>
@@ -55,7 +59,7 @@ export class LoginScreen extends React.Component {
                     style={styles.input}
                     padding='none'
                     dense={true}
-                    theme={{ dark: true, colors: { primary: '#333366' } }}
+                    theme={{ dark: true, colors: { primary: '#3176af' } }}
                 />
                 <TextInput
                     label='Contraseña'
@@ -65,7 +69,7 @@ export class LoginScreen extends React.Component {
                     style={styles.input}
                     padding='none'
                     dense={true}
-                    theme={{ dark: true, colors: { primary: '#333366' } }}
+                    theme={{ dark: true, colors: { primary: '#3176af' } }}
                 />
                 <CheckBox
                     style={styles.checkBox}
@@ -73,11 +77,18 @@ export class LoginScreen extends React.Component {
                     isChecked={this.state.rememberMe}
                     rightText={"Recordame"}
                 />
-                <Button style={styles.loginBtn} contentStyle={{height: 50}} mode="contained" uppercase={false} color='#333366' onPress={this.onLoginButtonPressed}>
+                <Button style={styles.loginBtn} contentStyle={{height: 50}} mode="contained" uppercase={false} color='#3176af' onPress={this.onLoginButtonPressed}>
                     Ingresar
                 </Button>
 
-                <Button style={styles.forgotBtn} mode="text" uppercase={false}  color='#ccc' compact={true} onPress={this.onForgotPassword} >
+                <View style={styles.changeAuth}>
+                    <Text>¿No tenes una cuenta?</Text>
+                    <Button style={styles.changeAuthBtn} mode="text" uppercase={false} contentStyle={{height: 20}}  color='#3176af' compact={true} onPress={this.goToRegister} >
+                        <Text>Registrate</Text>
+                    </Button>
+                </View>
+
+                <Button mode="text" uppercase={false}  color='#ccc' compact={true} onPress={this.onForgotPassword} >
                     ¿Olvidaste tu constraseña?
                 </Button>
             </ScrollView>
@@ -95,7 +106,7 @@ const styles = StyleSheet.create({
     },
     image: {
         height: 140,
-        width: 164,
+        width: 101,
         alignSelf: 'center'
     },
     input: {
@@ -109,7 +120,11 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         textTransform: 'capitalize'
     },
-    forgotBtn: {
-
+    changeAuth: {
+        flexDirection: 'row'
+    },
+    changeAuthBtn: {
+        padding: 0,
+        margin: 0
     }
 });

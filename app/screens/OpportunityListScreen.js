@@ -393,7 +393,7 @@ export class OpportunityListScreen extends React.Component {
 				style={styles.mt15} 
 				mode="contained" 
 				onPress={() => this.editOpportunity(this.state.chosenOpportunity)}
-				theme={{ dark: true, colors: { primary: '#333366' } }}>
+				theme={{ dark: true, colors: { primary: '#3176af' } }}>
 					Confirmar
 				</Button>
 				<TouchableOpacity 
@@ -471,7 +471,7 @@ export class OpportunityListScreen extends React.Component {
 						isChecked={this.state.chosenOpportunity.automation}
 						rightText={"Automatización de procesos"}
 					/>
-					<Button style={styles.mt15} mode="contained" onPress={() => this.editOpportunity(this.state.chosenOpportunity)} theme={{ dark: true, colors: { primary: '#333366' } }}>
+					<Button style={styles.mt15} mode="contained" onPress={() => this.editOpportunity(this.state.chosenOpportunity)} theme={{ dark: true, colors: { primary: '#3176af' } }}>
 						Siguiente
 					</Button>
 					<TouchableOpacity 
@@ -488,7 +488,7 @@ export class OpportunityListScreen extends React.Component {
 	render() {
 		return (
 			<View>
-				{this.state.visibleLoader == true ? <ActivityIndicator style={{marginTop:300}} size="large" color="#333366" /> : null}
+				{this.state.visibleLoader == true ? <ActivityIndicator style={{marginTop:300}} size="large" color="#3176af" /> : null}
 				<ScrollView
 					style={this.state.padding}>
 					<List.Section>
@@ -554,7 +554,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		width: '100%', 
 		height: 70, 
-		backgroundColor: '#333366', 
+		backgroundColor: '#3176af', 
 		justifyContent: 'center', 
 		alignItems: 'center',
 		position: 'absolute',
@@ -566,7 +566,7 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 15,
 		textAlign: 'center',
-		color: '#333366',
+		color: '#3176af',
 		fontWeight: 'bold',
 	},
 	checkBox:{

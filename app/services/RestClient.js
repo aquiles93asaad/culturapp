@@ -9,7 +9,7 @@ export default class RestClient {
         // Create the axios instance
         this.tokenServiceInstance = TokenService.getInstance();
         this.instance = axios.create({
-            baseURL: `http://190.210.180.225:3000/api/`,
+            baseURL: `http://192.168.0.4:3000/api/`,
             timeout: 30000,
         });
 

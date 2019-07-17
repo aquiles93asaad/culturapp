@@ -1,17 +1,17 @@
 // @flow
 import RestClient from './RestClient';
 
-export class CompanyService extends RestClient {
+export class CursosService extends RestClient {
     constructor(secured) {
         super(secured);
     }
 
-    getCompanies(filters) {
-        return this.instance.post('company/get', {
+    get(filters) {
+        return this.instance.post('curso/get', {
             filters
         }).then(result => {
-            if(typeof result.data.companies !== 'undefined') {
-                return Promise.resolve(result.data.companies);
+            if(typeof result.data.cursos !== 'undefined') {
+                return Promise.resolve(result.data.cursos);
             } else {
                 return Promise.reject(result.data);
             }   
@@ -21,7 +21,7 @@ export class CompanyService extends RestClient {
     }
 
     create(company) {
-        return this.instance.post('company/create', {
+        return this.instance.post('curso/create', {
             company
         }).then(result => {
             if(typeof result.data.company !== 'undefined') {

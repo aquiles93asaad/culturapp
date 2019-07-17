@@ -24,7 +24,7 @@ export class SaleOpportunityScreen3 extends React.Component {
 					Datos de la oportunidad
       			</Text>
                 <Image style={styles.image} source={require('../../assets/images/saleopportunity_final.png')} />
-                <Button style={styles.mt15} mode="contained" onPress={this.goStep2} theme={{ dark: true, colors: { primary: '#333366' } }}>
+                <Button style={styles.mt15} mode="contained" onPress={this.goStep2} theme={{ dark: true, colors: { primary: '#3176af' } }}>
                     Ver oportunidad
                 </Button>
 			</View>

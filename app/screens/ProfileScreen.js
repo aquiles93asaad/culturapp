@@ -43,7 +43,7 @@ export class ProfileScreen extends React.Component {
                         style={styles.input}
                         padding='none'
                         dense={true}
-                        theme={{ dark: true, colors: { primary: '#333366' } }}
+                        theme={{ dark: true, colors: { primary: '#3176af' } }}
                     />
                     <TextInput
                         label='Nueva contraseña'
@@ -53,7 +53,7 @@ export class ProfileScreen extends React.Component {
                         style={styles.input}
                         padding='none'
                         dense={true}
-                        theme={{ dark: true, colors: { primary: '#333366' } }}
+                        theme={{ dark: true, colors: { primary: '#3176af' } }}
                     />
                     <TextInput
                         label='Confrimar nueva contraseña'
@@ -63,7 +63,7 @@ export class ProfileScreen extends React.Component {
                         style={styles.input}
                         padding='none'
                         dense={true}
-                        theme={{ dark: true, colors: { primary: '#333366' } }}
+                        theme={{ dark: true, colors: { primary: '#3176af' } }}
                     />
                     <TextInput
                         label='Email'
@@ -73,7 +73,7 @@ export class ProfileScreen extends React.Component {
                         padding='none'
                         dense={true}
                         disabled={true}
-                        theme={{ dark: true, colors: { primary: '#333366' } }}
+                        theme={{ dark: true, colors: { primary: '#3176af' } }}
                     />
                     <TextInput
                         label='Nombre'
@@ -83,7 +83,7 @@ export class ProfileScreen extends React.Component {
                         padding='none'
                         dense={true}
                         disabled={true}
-                        theme={{ dark: true, colors: { primary: '#333366' } }}
+                        theme={{ dark: true, colors: { primary: '#3176af' } }}
                     />
                     <TextInput
                         label='Apellido'
@@ -93,9 +93,9 @@ export class ProfileScreen extends React.Component {
                         padding='none'
                         dense={true}
                         disabled={true}
-                        theme={{ dark: true, colors: { primary: '#333366' } }}
+                        theme={{ dark: true, colors: { primary: '#3176af' } }}
                     />
-                    <Button style={styles.formBtn} contentStyle={{height: 50}} mode="contained" uppercase={false} color='#333366' onPress={this.onUpdateProfile}>
+                    <Button style={styles.formBtn} contentStyle={{height: 50}} mode="contained" uppercase={false} color='#3176af' onPress={this.onUpdateProfile}>
                         Actualizar
                     </Button>
                 </ScrollView>

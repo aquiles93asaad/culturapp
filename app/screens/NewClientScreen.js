@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text, ScrollView } from 'react-native';
 import { TextInput, Button, Snackbar, RadioButton } from 'react-native-paper';
-import CheckBox from 'react-native-check-box';
 import { Dropdown } from 'react-native-material-dropdown';
 import { CompanyService } from '../services';
 import { IndustryService } from '../services/IndustryService';
@@ -214,7 +213,7 @@ export class NewClientScreen extends React.Component {
                     {this.renderClientForm()}
                     </ScrollView>
                     <ScrollView contentContainerStyle={styles.btnContainer}>
-                        <Button style={styles.nextBtn} contentStyle={{height: 50}} mode="contained" uppercase={false} color='#333366' onPress={this.createClient}>
+                        <Button style={styles.nextBtn} contentStyle={{height: 50}} mode="contained" uppercase={false} color='#3176af' onPress={this.createClient}>
                             Crear
                         </Button>
                     </ScrollView>
