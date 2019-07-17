@@ -34,6 +34,7 @@ export default class TokenService {
     saveToken = async (token) => {
         if (token) {
             try {
+                this.authToken = null;
                 await SecureStore.setItemAsync('AuthToken', JSON.stringify(token));
                 console.log('se guardó');
             } catch (error) {

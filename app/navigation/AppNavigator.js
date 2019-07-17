@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, TouchableOpacity, View } from 'react-native';
 import { createStackNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation';
-import { CursosScreen, ProfileScreen, SplashScreen, LoginScreen, RegisterScreen, OpportunityListScreen, SaleOpportunityScreen, SaleOpportunityScreen2, SaleOpportunityScreen3, NewClientScreen } from '../screens/index';
+import { CursosScreen, CursoScreen, MisCursosScreen, MiCursoScreen, ProfileScreen, SplashScreen, LoginScreen, RegisterScreen } from '../screens/index';
 import { AuthService } from '../services';
 
 const authService = new AuthService(false);
@@ -39,7 +39,7 @@ const carteleraStack = createStackNavigator(
             screen: CursosScreen,
         },
         Curso: {
-            screen: SaleOpportunityScreen2,
+            screen: CursoScreen,
         }
     },
     {
@@ -78,10 +78,10 @@ const carteleraStack = createStackNavigator(
 const cursosInscriptosStack = createStackNavigator(
     {
         Miscursos: {
-            screen: SaleOpportunityScreen,
+            screen: MisCursosScreen,
         },
         Micurso: {
-            screen: SaleOpportunityScreen2,
+            screen: MiCursoScreen,
         }
     },
     {
@@ -162,18 +162,36 @@ const Drawer = createDrawerNavigator(
             screen: carteleraStack,
             navigationOptions: {
                 drawerLabel: 'Cartelera',
+                drawerIcon: () => (
+                    <Image
+                        source={require('../../assets/images/cursos.png')}
+                        style={{height: 40, width: 32 }}
+                    />
+                )
             },
         },
         Mycursos: {
             screen: cursosInscriptosStack,
             navigationOptions: {
                 drawerLabel: 'Mis cursos',
+                drawerIcon: () => (
+                    <Image
+                        source={require('../../assets/images/materias.png')}
+                        style={{height: 40, width: 40 }}
+                    />
+                )
             },
         },
         Profile: {
             screen: miPerfilStack,
             navigationOptions: {
                 drawerLabel: 'Mi perfil',
+                drawerIcon: () => (
+                    <Image
+                        source={require('../../assets/images/profile.png')}
+                        style={{height: 40, width: 35 }}
+                    />
+                )
             },
         },
     }, {

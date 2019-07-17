@@ -12,6 +12,7 @@ export class AuthService extends RestClient {
             password: params.password
         }).then(result => {
             if (typeof result.data.user !== 'undefined') {
+                console.log(result.data.user);
                 this.tokenServiceInstance.saveToken(result.data.token);
                 return Promise.resolve(result.data.user);
             } else {
@@ -27,8 +28,6 @@ export class AuthService extends RestClient {
             email: email,
             dni: dni
         }).then(result => {
-            console.log("check:");
-            console.log( result.data);
             if (typeof result.data.userExists !== 'undefined') {
                 return Promise.resolve(result.data.userExists);
             } else {

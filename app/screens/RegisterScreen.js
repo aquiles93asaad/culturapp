@@ -51,7 +51,7 @@ export class RegisterScreen extends React.Component {
         })
         .then(user => {
             this.setState(initialState);
-            this.props.navigation.navigate('Home', { user: user });
+            this.props.navigation.navigate('Drawer', { user: user });
         })
         .catch(error => {
             alert(error);
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
     },
     input: {
-        marginBottom: 20,
+        marginBottom: 10,
     },
     checkBox: {
         marginBottom: 20,

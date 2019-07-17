@@ -1,7 +1,7 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Image } from 'react-native';
 import { Card, Title, Modal, TextInput, Button, IconButton } from 'react-native-paper';
-import { CursosService } from '../services';
+import { CursosService, AuthService } from '../services';
 import moment from "moment";
 import { Dropdown } from 'react-native-material-dropdown';
 
@@ -62,53 +62,103 @@ const localidades = [
 
 export class CursosScreen extends React.Component {
 
-    static navigationOptions = ({ navigation }) => {
-        return {
-            headerRight: (
-                <TouchableOpacity onPress={() => navigation.navigate('Profile', {user: navigation.getParam('user')})}>
+    static navigationOptions = ({ navigation }) => ({
+        headerRight: (
+            <React.Fragment>
+                <TouchableOpacity onPress={navigation.getParam('signOut')}>
+                    <Image style={{
+                        // alignSelf: 'center',
+                        height: 25,
+                        width: 25,
+                        resizeMode: 'contain',
+                        marginRight: 5
+                    }} source={require('../../assets/images/logout_icon.png')} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={navigation.getParam('showFiltersModal')}>
                     <IconButton
                         style={styles.filterBtn}
                         icon="search"
                         color='#fff'
                         size={30}
-                        onPress={this._showFiltersModal}
                     />
                 </TouchableOpacity>
-            ),
-        };
-    };
+            </React.Fragment>
+        )
+    });
 
     constructor(props) {
 		super(props);
     }
 
     state = {
-        // user: this.props.navigation.getParam('user')
         cursos: [],
         visibleLoader: true,
         filtroCurso: '',
         centros: [],
         centro: '',
+        centroId: '',
         localidades: localidades,
         localidad: '',
         precioDesde: '',
         precioHasta: '',
         showFiltersModal: false,
+        isFocused: false,
+    }
+
+    componentDidMount = async() => {
+        this.props.navigation.setParams({ 
+            showFiltersModal: this._showFiltersModal.bind(this) 
+        });
+        this.props.navigation.setParams({ 
+            signOut: this.signOut.bind(this) 
+        });
+        this.subs = [
+            this.props.navigation.addListener("didFocus", async() => {
+                this.setState({ isFocused: false })
+                await this.getCursos({}, false);
+                console.log('se ejecutó didFocus');
+                this.setState({ isFocused: true })
+            }),
+            // this.props.navigation.addListener("willFocus", async() => {
+            //     await this.getCursos({}, false);
+            //     console.log('se ejecutó willFocus');
+            //     this.setState({ isFocused: true })
+            // }),
+            this.props.navigation.addListener("willBlur", () => {
+                this.setState({ isFocused: false })
+            })
+        ];
     }
 
     componentWillMount = async() => {
-		await this.createServiceInstance();
-		await this.getCursos({});
+        await this.createServiceInstance();
+        // await this.getCursos({}, false);
+        this.props.navigation.setParams({
+            showFiltersModal: this._showFiltersModal.bind(this) 
+        });
+        this.props.navigation.setParams({ 
+            signOut: this.signOut.bind(this) 
+        });
 		// await this.getUsers();
     }
 
+    // componentWillUnmount() {
+    //     this.subs.forEach(sub => sub.remove());
+    // }
+
+    signOut() {
+        this.authService.logout()
+        .then(logoutSuccess => this.props.navigation.navigate('Login'))
+        .catch(error => { console.log(error) })
+    }
+
 	createServiceInstance = async() => {
-        // this.opportunityService = new OpportunityService(true);
+        this.authService = new AuthService(true);
         this.cursosService = new CursosService(true);
     }
     
     getCursos = async(filters) => {
-		await this.cursosService.get(filters)
+		await this.cursosService.get(filters, false)
 		.then(cursos => {
 			this.setState({ cursos: [...cursos ] });
         })
@@ -119,12 +169,17 @@ export class CursosScreen extends React.Component {
 		});
 	};
 
-    _showFiltersModal = () => this.setState({ showFiltersModal: true });
-
-    redirectToCurso = (cursoId) => {
-        this.props.navigation.navigate('Curso', {cursoId: cursoId});
+    redirectToCurso = (cursoData) => {
+        this.props.navigation.navigate('Curso', {curso: cursoData});
     };
 
+    _showFiltersModal() {
+        this.setState({ showFiltersModal: true })
+    };
+    
+    _hideFiltersModal = () => {
+        this.setState({ showFiltersModal: false })
+    }
 
     showList() {
         return (
@@ -132,7 +187,7 @@ export class CursosScreen extends React.Component {
                 var fechaInicio = moment(data.fechaInicio).format("DD/MM/YYYY");
                 var fechaFin = moment(data.fechaFin).format("DD/MM/YYYY");
                 return (
-                    <TouchableOpacity onPress={() => this.redirectToCurso(data._id)} key={data._id}>
+                    <TouchableOpacity onPress={() => this.redirectToCurso(data)} key={data._id}>
                         <Card style={styles.card} elevation={4}>
                             <Card.Content>
                                 <Title>{data.nombre}</Title>
@@ -146,64 +201,115 @@ export class CursosScreen extends React.Component {
 			})
 		)
     }
+
+    onChangeLocalidad = (value, index, data) => {
+		this.setState({ localidad: value });
+    }
+
+    onChangeCentro = (value, index, data) => {
+		if (this.state.centro._id != this.state.centros[index]._id){
+            this.setState({ centro: value.nombre });
+            this.setState({ centroId: value._id });
+		}
+    }
+
+    filter = async() => {
+        let filters = {};
+        if(this.state.centro != '') {
+            filters['$text'] = { $search: this.state.centro}
+        }
+
+        if(this.state.localidad != '') {
+            filters['sede.localidad'] = this.state.localidad;
+        }
+
+        if(this.state.precioDesde != '') {
+            if(typeof filters['precio'] ==='undefined') {
+                filters['precio'] = { $gte: '' };
+            }
+            filters['precio']['$gte'] = this.state.precioDesde;
+        }
+
+        if(this.state.precioHasta != '') {
+            if(typeof filters['precio'] ==='undefined') {
+                filters['precio'] = { $lte: '' };
+            }
+            filters['precio']['$lte'] = this.state.precioHasta;
+        }
+
+        this.setState({visibleLoader: true});
+        await this.getCursos(filters);
+        this._hideFiltersModal();
+    }
     
     renderFilterModal = () => {
 		if(this.state.showFiltersModal) {
-			let data = [];
-			for (let i = 0; i < this.state.clients.length; i++) {
-				data.push( {"value" : this.state.clients[i].name, "id" :  this.state.clients[i]._id })
-			}
+			let localidadesData = [];
+			for (let i = 0; i < this.state.localidades.length; i++) {
+				localidadesData.push({"value": this.state.localidades[i] })
+            }
+            
 			return ( 
-				<View>
+				<View style={styles.innerModal}>
 					<Text style={styles.title}>Filtros de búsqueda</Text>
+                    <TextInput
+						label='Nombre de curso'
+						value={this.state.filtroCurso}
+                        padding='none'
+                        dense={true}
+                        theme={{ dark: true, colors: { primary: '#3176af' } }}
+						onChangeText={(curso) => this.setState({ filtroCurso: curso })}
+					/>
 					<Dropdown
-						label='Cliente'
-						data={data}
-						value={this.state.chosenOpportunity.companyClient.name}
-						containerStyle={styles.picker}
-						onChangeText={this.onChangeCompany}
+						label='Localidad'
+						data={localidadesData}
+						value={this.state.localidad}
+                        onChangeText={this.onChangeCompany} 
 					/>
-					<TextInput
-						label='Nombre de la oportunidad'
-						value={this.state.chosenOpportunity.name}
-						style={styles.inputEdit}
-						onChangeText={(newName) => this.setState({ chosenOpportunity: { ...this.state.chosenOpportunity, name: newName} })}
-					/>
-					<TextInput
-						label='Descripción'
-						multiline={true}
-						numberOfLines={4}
-						style={styles.inputEdit}
-						onChangeText={(newDescription) => this.setState({ chosenOpportunity: { ...this.state.chosenOpportunity, description: newDescription} })}
-						value={this.state.chosenOpportunity.description}/>
-					<Button style={styles.mt15} mode="contained" onPress={() => this.editOpportunity(this.state.chosenOpportunity)} theme={{ dark: true, colors: { primary: '#3176af' } }}>
-						Siguiente
+                    <TextInput
+                        label='Precio Desde'
+                        value={this.state.precioDesde}
+                        onChangeText={desde => this.setState({ precioDesde: desde })}
+                        padding='none'
+                        dense={true}
+                        theme={{ dark: true, colors: { primary: '#3176af' } }}
+                        keyboardType='number-pad'
+                    />
+                    <TextInput
+                        label='Precio Hasta'
+                        value={this.state.precioHasta}
+                        onChangeText={hasta => this.setState({ precioHasta: hasta })}
+                        padding='none'
+                        dense={true}
+                        theme={{ dark: true, colors: { primary: '#3176af' } }}
+                        keyboardType='number-pad'
+                    />
+					<Button style={styles.searchBtn} mode="contained" onPress={this.filter} theme={{ dark: true, colors: { primary: '#3176af' } }}>
+						Buscar
 					</Button>
-					<TouchableOpacity 
-						activeOpacity={0.5}
-						onPress={this._hideModalEdit}
-						>
-						<Text style={styles.cancelButton}>Cancelar</Text>
-					</TouchableOpacity>
+
+                    <Button style={styles.cancelButton} mode="text" uppercase={false} contentStyle={{height: 20}} color='#3176af' compact={true} onPress={this._hideFiltersModal} >
+                        <Text>Cancelar</Text>
+                    </Button>
 				</View>
 			)
 		}
 	}
 
     render() {
+        const { isFocused } = this.state;
+
         return (
             <View style={styles.container}>
                 {this.state.visibleLoader == true ? <ActivityIndicator style={{marginTop:300}} size="large" color="#3176af" /> : null}
-                <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-                    {/* <Text style={styles.helloText}>Hola</Text>
-                    <Text style={styles.userText}>{this.state.user.nombre} {this.state.user.apellido}</Text> */}
+                <ScrollView visible={isFocused} style={styles.container} contentContainerStyle={styles.contentContainer}>
                     <View contentContainerStyle={styles.rootContainer}>
                         {this.showList()}
                     </View>
                 </ScrollView>
-                <Modal visible={this.state.showFiltersModal} contentContainerStyle={styles.modal}>
-					{this.renderFilterModal()}
-				</Modal>
+                <Modal visible={this.state.showFiltersModal} contentContainerStyle={styles.modal} onDismiss={this._hideFiltersModal}>
+                    {this.renderFilterModal()}
+                </Modal>
             </View>
         );
     }
@@ -225,18 +331,6 @@ const styles = StyleSheet.create({
     card: {
         marginBottom: 20,
     },
-    helloText: {
-        fontSize: 20,
-        textAlign: 'center',
-        color: '#3176af',
-    },
-    userText: {
-        fontSize: 20,
-        marginBottom: 10,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        color: '#3176af',
-    },
     filterBtn: {
         backgroundColor: '#3176af',
         borderRadius: 30,
@@ -244,9 +338,19 @@ const styles = StyleSheet.create({
         width: 50,
     },
     modal: {
-		height: 450,
-		backgroundColor:'white',
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
+        height: 450,
+        backgroundColor:'white',
+        justifyContent: 'flex-start',
+    },
+    innerModal: {
+        flex: 1,
+        padding: 15,
+    },
+    searchBtn: {
+        marginBottom: 20,
+        marginTop: 20
+    },
+    cancelButton: {
+        
+    }
 });
