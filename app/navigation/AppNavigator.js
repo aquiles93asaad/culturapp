@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, TouchableOpacity, View } from 'react-native';
 import { createStackNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation';
-import { CursosScreen, CursoScreen, MisCursosScreen, MiCursoScreen, ProfileScreen, SplashScreen, LoginScreen, RegisterScreen } from '../screens/index';
+import { CursosScreen, CursoScreen, MisCursosScreen, MiCursoScreen, ProfileScreen, SplashScreen, LoginScreen, RegisterScreen, AsistenciasScreen } from '../screens/index';
 import { AuthService } from '../services';
 
 const authService = new AuthService(false);
@@ -82,6 +82,9 @@ const cursosInscriptosStack = createStackNavigator(
         },
         Micurso: {
             screen: MiCursoScreen,
+        },
+        Asistencias: {
+            screen: AsistenciasScreen
         }
     },
     {

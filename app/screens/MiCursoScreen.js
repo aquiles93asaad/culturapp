@@ -16,17 +16,17 @@ export class MiCursoScreen extends React.Component {
         this.setState({ curso: this.props.navigation.getParam('curso') })
     }
 
-    redirectToNovedades = () => {
-        this.props.navigation.navigate('Novedades', {curso: this.state.curso});
-    };
+    // redirectToNovedades = () => {
+    //     this.props.navigation.navigate('Novedades', {curso: this.state.curso});
+    // };
 
     redirectToAsistencia = () => {
-        this.props.navigation.navigate('Asistencia', {curso: this.state.curso});
+        this.props.navigation.navigate('Asistencias', {curso: this.state.curso});
     };
 
-    redirectToCronograma = () => {
-        this.props.navigation.navigate('Asistencia', {curso: this.state.curso});
-    };
+    // redirectToCronograma = () => {
+    //     this.props.navigation.navigate('Asistencia', {curso: this.state.curso});
+    // };
 
     render() {
         return (
@@ -34,14 +34,6 @@ export class MiCursoScreen extends React.Component {
                 <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
                     <View contentContainerStyle={styles.rootContainer}>
                         <Text style={styles.mainText}>{this.state.curso.nombre}</Text>
-                        <TouchableOpacity onPress={() => this.redirectToNovedades()}>
-                            <Card style={styles.card} elevation={4}>
-                                <Card.Content>
-                                    <Title>Novedades</Title>
-                                    <Text></Text>
-                                </Card.Content>
-                            </Card>
-                        </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.redirectToAsistencia()}>
                             <Card style={styles.card} elevation={4}>
                                 <Card.Content>
@@ -49,10 +41,19 @@ export class MiCursoScreen extends React.Component {
                                 </Card.Content>
                             </Card>
                         </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.redirectToNovedades()}>
+                            <Card style={styles.card} elevation={4}>
+                                <Card.Content>
+                                    <Title>Novedades</Title>
+                                    <Text>Próximamente</Text>
+                                </Card.Content>
+                            </Card>
+                        </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.redirectToCronograma()}>
                             <Card style={styles.card} elevation={4}>
                                 <Card.Content>
                                     <Title>Cronograma</Title>
+                                    <Text>Próximamente</Text>
                                 </Card.Content>
                             </Card>
                         </TouchableOpacity>

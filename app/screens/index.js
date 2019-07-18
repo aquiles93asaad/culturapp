@@ -6,3 +6,4 @@ export * from './ProfileScreen';
 export * from './LoginScreen';
 export * from './RegisterScreen';
 export * from './SplashScreen';
+export * from './AsistenciasScreen';

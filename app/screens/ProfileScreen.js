@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, KeyboardAvoidingView, ScrollView, Platform, Keyboard } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
+import { AuthService } from '../services';
 
 export class ProfileScreen extends React.Component {
 
@@ -8,15 +9,30 @@ export class ProfileScreen extends React.Component {
         super(props);
     }
 
-    user = this.props.navigation.getParam('user')
-
     state = {
-        email: this.user.email,
-        name: this.user.name,
-        lastName: this.user.lastName,
-        phone: this.user.phone,
+        user: {},
         password: '',
-        repeatPassword: ''
+        repeatPassword: '',
+        telefono: ''
+    }
+
+    componentWillMount = async() => {
+        await this.createServiceInstance();
+        await this.getUser();
+    }
+
+    createServiceInstance = async() => {
+        this.authService = new AuthService(true);
+    }
+
+    getUser = async() => {
+        await this.authService.me()
+        .then(user => {
+            this.setState({ user: user })
+            this.setState({ telefono: user.telefono })
+        }).catch(error => {
+            console.log(error);
+        });
     }
 
     onUpdateProfile = () => {
@@ -38,8 +54,8 @@ export class ProfileScreen extends React.Component {
                 <ScrollView contentContainerStyle={styles.container} onStartShouldSetResponder={() => true} onResponderRelease={() => Keyboard.dismiss()}>
                     <TextInput
                         label='Teléfono/Celular'
-                        value={this.state.phone}
-                        onChangeText={(phone) => this.setState({ phone: phone })}
+                        value={this.state.telefono}
+                        onChangeText={(phone) => this.setState({ telefono: phone })}
                         style={styles.input}
                         padding='none'
                         dense={true}
@@ -67,7 +83,7 @@ export class ProfileScreen extends React.Component {
                     />
                     <TextInput
                         label='Email'
-                        value={this.state.email}
+                        value={this.state.user.email}
                         onChangeText={(email) => this.setState({ email: email })}
                         style={styles.input}
                         padding='none'
@@ -77,7 +93,7 @@ export class ProfileScreen extends React.Component {
                     />
                     <TextInput
                         label='Nombre'
-                        value={this.state.name}
+                        value={this.state.user.nombre}
                         onChangeText={(name) => this.setState({ name: name })}
                         style={styles.input}
                         padding='none'
@@ -87,7 +103,7 @@ export class ProfileScreen extends React.Component {
                     />
                     <TextInput
                         label='Apellido'
-                        value={this.state.lastName}
+                        value={this.state.user.apellido}
                         onChangeText={(lastName) => this.setState({ lastName: lastName })}
                         style={styles.input}
                         padding='none'
